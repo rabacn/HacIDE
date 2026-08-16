@@ -1,0 +1,42 @@
+// Code to compile
+target: x86_64;
+
+use memory;
+
+namespace default { 
+    data { 
+        struct ControlStatusRegister {
+            // 1. Explicit byte anchor (Starts at offset 0x00)
+            u32 control @ 0x00; 
+
+            // 2. Bit-packed fields within a single 16-bit register at offset 0x04
+            u16 enable      : 1 @ 0x04; // Bit 0
+            pad_bits        : 3;        // Bits 1-3 reserved/skipped
+            u16 mode        : 4;        // Bits 4-7
+            u16 error_code  : 8;        // Bits 8-15
+
+            // 3. Skipping unmapped address space (e.g., gap from 0x06 to 0x10)
+            pad_bytes 10;               // Skips 10 bytes explicitly
+
+            // 4. Anchored multi-byte field (Starts at 0x10)
+            u32 data_buffer @ 0x10;  // Array at offset 0x10
+        }
+        u32 small_var;
+        string [15] hello = "Hello World";
+        const u32 EOF = 32;
+        const u16 tmp =0;
+    }
+            
+    function main() : null {
+        var char my_var = " ";
+        var ControlStatusRegister cs1;
+
+
+        push rbx;
+        nop;
+        mov rbx,0x3F;
+        mov eax, small_var;
+        lea rax, hello;
+        small_var = cs1.mode;
+    }
+}

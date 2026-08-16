@@ -1,0 +1,91 @@
+{
+    "status": "filled",
+    "symbol": {
+        "global": {
+            "scope_path": "global",
+            "parent": null,
+            "type": "global",
+            "symbols": []
+        },
+        "global.default": {
+            "scope_path": "global.default",
+            "parent": "global",
+            "type": "namespace",
+            "symbols": {
+                "small_var": {
+                    "id": 1,
+                    "name": "small_var",
+                    "scope_path": "global.default",
+                    "base_type": "u32",
+                    "capacity": null,
+                    "bits": 32,
+                    "is_mutable": true,
+                    "borrow_state": "none",
+                    "borrow_count": 0
+                },
+                "hello": {
+                    "id": 2,
+                    "name": "hello",
+                    "scope_path": "global.default",
+                    "base_type": "string",
+                    "capacity": 15,
+                    "bits": 64,
+                    "is_mutable": true,
+                    "borrow_state": "none",
+                    "borrow_count": 0
+                },
+                "EOF": {
+                    "id": 3,
+                    "name": "EOF",
+                    "scope_path": "global.default",
+                    "base_type": "u32",
+                    "capacity": null,
+                    "bits": 32,
+                    "is_mutable": false,
+                    "borrow_state": "none",
+                    "borrow_count": 0
+                },
+                "tmp": {
+                    "id": 4,
+                    "name": "tmp",
+                    "scope_path": "global.default",
+                    "base_type": "u16",
+                    "capacity": null,
+                    "bits": 16,
+                    "is_mutable": false,
+                    "borrow_state": "none",
+                    "borrow_count": 0
+                }
+            }
+        },
+        "global.default.main": {
+            "scope_path": "global.default.main",
+            "parent": "global.default",
+            "type": "function",
+            "symbols": {
+                "my_var": {
+                    "id": 5,
+                    "name": "my_var",
+                    "scope_path": "global.default.main",
+                    "base_type": "char",
+                    "capacity": 1,
+                    "bits": 32,
+                    "is_mutable": true,
+                    "borrow_state": "none",
+                    "borrow_count": 0
+                },
+                "cs1": {
+                    "id": 6,
+                    "name": "cs1",
+                    "scope_path": "global.default.main",
+                    "base_type": "ControlStatusRegister",
+                    "capacity": null,
+                    "bits": 0,
+                    "is_mutable": true,
+                    "borrow_state": "none",
+                    "borrow_count": 0
+                }
+            }
+        }
+    }
+}

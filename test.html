@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HAC API Test Harness</title>
+    <!-- Bootstrap 4 / Dark Theme Styling -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #1e1e1e;
+            --panel-bg: #252526;
+            --border-color: #333333;
+            --text-main: #d4d4d4;
+            --accent-blue: #007acc;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            min-height: 100vh;
+            padding-bottom: 30px;
+        }
+
+        .navbar {
+            background-color: var(--panel-bg);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-dark {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+        }
+
+        .card-header-dark {
+            background-color: #2d2d2d;
+            border-bottom: 1px solid var(--border-color);
+            color: #fff;
+            font-weight: 600;
+        }
+
+        pre.code-dump {
+            background-color: #141414;
+            color: #9cdcfe;
+            padding: 15px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 13px;
+            max-height: 480px;
+            overflow: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        textarea.payload-input {
+            background-color: var(--bg-dark);
+            color: #ce9178;
+            border: 1px solid var(--border-color);
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 13px;
+        }
+
+        textarea.payload-input:focus {
+            background-color: #141414;
+            color: #ce9178;
+            border-color: var(--accent-blue);
+            box-shadow: none;
+        }
+
+        .badge-method {
+            font-size: 11px;
+            padding: 4px 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand navbar-dark px-3 mb-4">
+        <a class="navbar-brand font-weight-bold" href="#">
+            <i class="fas fa-vial text-warning mr-2"></i>HAC API Test Harness
+        </a>
+        <div class="ml-auto">
+            <a href="index.html" class="btn btn-sm btn-outline-secondary">
+                <i class="fas fa-arrow-left mr-1"></i> Back to IDE
+            </a>
+        </div>
+    </nav>
+
+    <div class="container-fluid px-4">
+        <div class="row">
+
+            <!-- LEFT CONTROL PANEL: ACTION CONFIGURATION -->
+            <div class="col-lg-5 mb-4">
+                <div class="card card-dark shadow-sm">
+                    <div class="card-header card-header-dark d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-sliders-h mr-2"></i>Request Setup</span>
+                        <span id="http-method-badge" class="badge badge-info badge-method">GET</span>
+                    </div>
+                    <div class="card-body">
+
+                        <!-- Action Select -->
+                        <div class="form-group">
+                            <label class="small text-muted font-weight-bold">SELECT ACTION</label>
+                            <select id="action-select" class="form-control bg-dark text-light border-secondary" onchange="onActionChange()">
+                                <option value="list_projects">list_projects</option>
+                                <option value="create_project">create_project</option>
+                                <option value="list_files">list_files</option>
+                                <option value="create_file">create_file</option>
+                                <option value="load">load</option>
+                                <option value="save">save</option>
+                                <option value="compile_and_fetch">compile_and_fetch</option>
+                                <option value="custom">-- Custom Action --</option>
+                            </select>
+                        </div>
+
+                        <!-- Target Action Input (For custom override) -->
+                        <div class="form-group">
+                            <label class="small text-muted font-weight-bold">ACTION PARAMETER (?action=)</label>
+                            <input type="text" id="action-input" class="form-control form-control-sm bg-dark text-light border-secondary" value="list_projects">
+                        </div>
+
+                        <div class="form-row">
+                            <!-- Project Parameter -->
+                            <div class="form-group col-md-6">
+                                <label class="small text-muted font-weight-bold">PROJECT (?project=)</label>
+                                <input type="text" id="project-input" class="form-control form-control-sm bg-dark text-light border-secondary" value="default">
+                            </div>
+
+                            <!-- File Parameter -->
+                            <div class="form-group col-md-6">
+                                <label class="small text-muted font-weight-bold">FILE (?file=)</label>
+                                <input type="text" id="file-input" class="form-control form-control-sm bg-dark text-light border-secondary" value="main.hac">
+                            </div>
+                        </div>
+
+                        <!-- Stage Parameter -->
+                        <div class="form-group">
+                            <label class="small text-muted font-weight-bold">STAGE (?stage=)</label>
+                            <select id="stage-input" class="form-control form-control-sm bg-dark text-light border-secondary">
+                                <option value="lexer">lexer</option>
+                                <option value="parser">parser</option>
+                                <option value="mir">mir</option>
+                            </select>
+                        </div>
+
+                        <!-- HTTP Method Choice -->
+                        <div class="form-group">
+                            <label class="small text-muted font-weight-bold">HTTP METHOD</label>
+                            <div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="method-get" name="http-method" value="GET" class="custom-control-input" checked onchange="updateMethodBadge()">
+                                    <label class="custom-control-label small" for="method-get">GET</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="method-post" name="http-method" value="POST" class="custom-control-input" onchange="updateMethodBadge()">
+                                    <label class="custom-control-label small" for="method-post">POST</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Request Body (Payload) -->
+                        <div class="form-group">
+                            <label class="small text-muted font-weight-bold">JSON PAYLOAD (POST BODY)</label>
+                            <textarea id="payload-input" class="form-control payload-input" rows="6" placeholder='{"content": "// sample code"}'></textarea>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button class="btn btn-primary btn-block font-weight-bold" onclick="executeApiCall()">
+                            <i class="fas fa-paper-plane mr-2"></i>Send Request
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT DISPLAY PANEL: REQUEST & RESPONSE DUMP -->
+            <div class="col-lg-7">
+                
+                <!-- Request Preview Card -->
+                <div class="card card-dark shadow-sm mb-4">
+                    <div class="card-header card-header-dark">
+                        <i class="fas fa-network-wired mr-2"></i>Submitted Request Details
+                    </div>
+                    <div class="card-body py-2">
+                        <div class="small mb-1">
+                            <strong class="text-secondary">TARGET URL:</strong> 
+                            <span id="request-url-display" class="text-info font-weight-bold">api.php?action=list_projects</span>
+                        </div>
+                        <div class="small mb-1">
+                            <strong class="text-secondary">HEADERS:</strong> 
+                            <span id="request-headers-display" class="text-warning">Content-Type: application/json</span>
+                        </div>
+                        <div class="small">
+                            <strong class="text-secondary">PAYLOAD SENT:</strong> 
+                            <span id="request-body-display" class="text-muted">None</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- JSON Dump Response Card -->
+                <div class="card card-dark shadow-sm">
+                    <div class="card-header card-header-dark d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-code mr-2"></i>Raw JSON Response</span>
+                        <span id="response-status" class="badge badge-secondary">Awaiting Call</span>
+                    </div>
+                    <div class="card-body">
+                        <pre id="json-response-dump" class="code-dump">// Click "Send Request" to view raw JSON output from api.php...</pre>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- TEST HARNESS LOGIC -->
+    <script>
+        // Preset action defaults for quick testing
+        const actionDefaults = {
+            'list_projects': { method: 'GET', project: '', file: '', payload: '' },
+            'create_project': { method: 'GET', project: 'my_test_project', file: '', payload: '' },
+            'list_files': { method: 'GET', project: 'default', file: '', payload: '' },
+            'create_file': { method: 'POST', project: 'default', file: 'test_file.hac', payload: '' },
+            'load': { method: 'GET', project: 'default', file: 'main.hac', payload: '' },
+            'save': { 
+                method: 'POST', 
+                project: 'default', 
+                file: 'main.hac', 
+                payload: JSON.stringify({ content: "// Test save from test.html\n\nfunc main() {\n    return 42;\n}" }, null, 2) 
+            },
+            'compile_and_fetch': { 
+                method: 'POST', 
+                project: 'default', 
+                file: 'main.hac', 
+                stage: 'lexer',
+                payload: JSON.stringify({ content: "// Code to compile\nnamespace default\\main {\n}" }, null, 2) 
+            },
+            'custom': { method: 'GET', project: 'default', file: 'main.hac', payload: '' }
+        };
+
+        function updateMethodBadge() {
+            const method = document.querySelector('input[name="http-method"]:checked').value;
+            const badge = document.getElementById('http-method-badge');
+            badge.textContent = method;
+            badge.className = `badge badge-method ${method === 'POST' ? 'badge-warning' : 'badge-info'}`;
+        }
+
+        function onActionChange() {
+            const action = document.getElementById('action-select').value;
+            const actionInput = document.getElementById('action-input');
+            actionInput.value = action;
+
+            const config = actionDefaults[action] || actionDefaults['custom'];
+
+            // Update parameters
+            document.getElementById('project-input').value = config.project;
+            document.getElementById('file-input').value = config.file;
+            document.getElementById('payload-input').value = config.payload || '';
+
+            // Update radio selection
+            if (config.method === 'POST') {
+                document.getElementById('method-post').checked = true;
+            } else {
+                document.getElementById('method-get').checked = true;
+            }
+
+            updateMethodBadge();
+        }
+
+        async function executeApiCall() {
+            const action = document.getElementById('action-input').value.trim();
+            const project = document.getElementById('project-input').value.trim();
+            const file = document.getElementById('file-input').value.trim();
+            const stage = document.getElementById('stage-input').value;
+            const method = document.querySelector('input[name="http-method"]:checked').value;
+            const rawPayload = document.getElementById('payload-input').value;
+
+            const statusBadge = document.getElementById('response-status');
+            const dumpContainer = document.getElementById('json-response-dump');
+
+            // Build Query String URL
+            let queryParams = [];
+            if (action) queryParams.push(`action=${encodeURIComponent(action)}`);
+            if (project) queryParams.push(`project=${encodeURIComponent(project)}`);
+            if (file) queryParams.push(`file=${encodeURIComponent(file)}`);
+            if (action === 'compile_and_fetch' && stage) queryParams.push(`stage=${encodeURIComponent(stage)}`);
+
+            const targetUrl = `api.php?${queryParams.join('&')}`;
+
+            // Update Request Inspector
+            document.getElementById('request-url-display').textContent = targetUrl;
+            document.getElementById('request-headers-display').textContent = method === 'POST' ? 'Content-Type: application/json' : 'None';
+            document.getElementById('request-body-display').textContent = (method === 'POST' && rawPayload) ? rawPayload : 'None';
+
+            statusBadge.textContent = "Executing...";
+            statusBadge.className = "badge badge-warning";
+
+            // Prepare fetch options
+            const fetchOptions = {
+                method: method,
+                headers: {}
+            };
+
+            if (method === 'POST' && rawPayload) {
+                fetchOptions.headers['Content-Type'] = 'application/json';
+                fetchOptions.body = rawPayload;
+            }
+
+            try {
+                const response = await fetch(targetUrl, fetchOptions);
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                
+                statusBadge.textContent = `${response.status} ${response.statusText}`;
+                statusBadge.className = response.ok ? "badge badge-success" : "badge badge-danger";
+
+                if (isJson) {
+                    const data = await response.json();
+                    dumpContainer.textContent = JSON.stringify(data, null, 2);
+                } else {
+                    // Fallback if PHP returns raw HTML or plain text error
+                    const textData = await response.text();
+                    dumpContainer.textContent = textData || "// Empty response returned";
+                }
+
+            } catch (err) {
+                statusBadge.textContent = "Network Error";
+                statusBadge.className = "badge badge-danger";
+                dumpContainer.textContent = JSON.stringify({
+                    status: "error",
+                    message: err.message,
+                    hint: "Ensure api.php is accessible and web server is running."
+                }, null, 2);
+            }
+        }
+
+        // Initialize state on load
+        document.addEventListener('DOMContentLoaded', () => {
+            onActionChange();
+        });
+    </script>
+</body>
+</html>

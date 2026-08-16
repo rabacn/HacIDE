@@ -1,0 +1,5 @@
+// New HAC Project: Test2
+
+func main() {
+    return 0;
+}

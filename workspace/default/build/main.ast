@@ -1,0 +1,284 @@
+{
+    "AST": "Parsed",
+    "ast": [
+        {
+            "type": "metadata",
+            "key": "target",
+            "value": "x86_64",
+            "line": 2
+        },
+        {
+            "type": "use_statement",
+            "path": [
+                "memory"
+            ],
+            "alias": "memory",
+            "line": 4
+        },
+        {
+            "type": "namespace",
+            "name": "default",
+            "body": [
+                {
+                    "type": "data_block",
+                    "variables": [
+                        {
+                            "type": "struct_definition",
+                            "name": "ControlStatusRegister",
+                            "members": [
+                                {
+                                    "type": "struct_member",
+                                    "name": "control",
+                                    "dataType": "u32",
+                                    "capacity": null,
+                                    "bitWidth": null,
+                                    "byteOffset": "0x00",
+                                    "isPadding": false,
+                                    "line": 10
+                                },
+                                {
+                                    "type": "struct_member",
+                                    "name": "enable",
+                                    "dataType": "u16",
+                                    "capacity": null,
+                                    "bitWidth": 1,
+                                    "byteOffset": "0x04",
+                                    "isPadding": false,
+                                    "line": 13
+                                },
+                                {
+                                    "type": "struct_padding",
+                                    "kind": "bit",
+                                    "size": 3,
+                                    "isPadding": true,
+                                    "line": 14
+                                },
+                                {
+                                    "type": "struct_member",
+                                    "name": "mode",
+                                    "dataType": "u16",
+                                    "capacity": null,
+                                    "bitWidth": 4,
+                                    "byteOffset": null,
+                                    "isPadding": false,
+                                    "line": 15
+                                },
+                                {
+                                    "type": "struct_member",
+                                    "name": "error_code",
+                                    "dataType": "u16",
+                                    "capacity": null,
+                                    "bitWidth": 8,
+                                    "byteOffset": null,
+                                    "isPadding": false,
+                                    "line": 16
+                                },
+                                {
+                                    "type": "struct_padding",
+                                    "kind": "byte",
+                                    "size": 10,
+                                    "isPadding": true,
+                                    "line": 19
+                                },
+                                {
+                                    "type": "struct_member",
+                                    "name": "data_buffer",
+                                    "dataType": "u32",
+                                    "capacity": null,
+                                    "bitWidth": null,
+                                    "byteOffset": "0x10",
+                                    "isPadding": false,
+                                    "line": 22
+                                }
+                            ],
+                            "line": 8
+                        },
+                        {
+                            "type": "variable",
+                            "label": "small_var",
+                            "value": null,
+                            "baseTypeInfo": "u32",
+                            "capacityTypeInfo": null,
+                            "align": null,
+                            "is_const": false,
+                            "line": 24
+                        },
+                        {
+                            "type": "variable",
+                            "label": "hello",
+                            "value": "Hello World",
+                            "baseTypeInfo": "string",
+                            "capacityTypeInfo": 15,
+                            "align": null,
+                            "is_const": false,
+                            "line": 25
+                        },
+                        {
+                            "type": "variable",
+                            "label": "EOF",
+                            "value": "32",
+                            "baseTypeInfo": "u32",
+                            "capacityTypeInfo": null,
+                            "align": null,
+                            "is_const": true,
+                            "line": 26
+                        },
+                        {
+                            "type": "variable",
+                            "label": "tmp",
+                            "value": "0",
+                            "baseTypeInfo": "u16",
+                            "capacityTypeInfo": null,
+                            "align": null,
+                            "is_const": true,
+                            "line": 27
+                        }
+                    ]
+                },
+                {
+                    "type": "function",
+                    "name": "main",
+                    "params": [],
+                    "return_type": "null",
+                    "body": [
+                        {
+                            "type": "variable",
+                            "label": "my_var",
+                            "value": " ",
+                            "baseTypeInfo": "char",
+                            "capacityTypeInfo": 1,
+                            "align": null,
+                            "is_const": false,
+                            "line": 31
+                        },
+                        {
+                            "type": "variable",
+                            "label": "cs1",
+                            "value": null,
+                            "baseTypeInfo": "ControlStatusRegister",
+                            "capacityTypeInfo": null,
+                            "align": null,
+                            "is_const": false,
+                            "line": 32
+                        },
+                        {
+                            "type": "asm",
+                            "mnemonic": "push",
+                            "operands": [
+                                {
+                                    "type": "reg",
+                                    "value": "rbx",
+                                    "data": {
+                                        "bits": 64,
+                                        "id": 3,
+                                        "type": "gpr"
+                                    }
+                                }
+                            ],
+                            "line": 35,
+                            "schema_info": {
+                                "family": "plus_rd",
+                                "base": 80,
+                                "type": "stack"
+                            }
+                        },
+                        {
+                            "type": "asm",
+                            "mnemonic": "nop",
+                            "operands": [],
+                            "line": 36,
+                            "schema_info": {
+                                "family": "no_args",
+                                "base": 144,
+                                "type": "generic"
+                            }
+                        },
+                        {
+                            "type": "asm",
+                            "mnemonic": "mov",
+                            "operands": [
+                                {
+                                    "type": "reg",
+                                    "value": "rbx",
+                                    "data": {
+                                        "bits": 64,
+                                        "id": 3,
+                                        "type": "gpr"
+                                    }
+                                },
+                                {
+                                    "type": "imm",
+                                    "value": "0x3F",
+                                    "data": "0x3F"
+                                }
+                            ],
+                            "line": 37,
+                            "schema_info": {
+                                "family": "move_standard",
+                                "type": "move"
+                            }
+                        },
+                        {
+                            "type": "asm",
+                            "mnemonic": "mov",
+                            "operands": [
+                                {
+                                    "type": "reg",
+                                    "value": "eax",
+                                    "data": {
+                                        "bits": 32,
+                                        "id": 0,
+                                        "type": "gpr"
+                                    }
+                                },
+                                {
+                                    "type": "variable",
+                                    "value": "small_var",
+                                    "data": null
+                                }
+                            ],
+                            "line": 38,
+                            "schema_info": {
+                                "family": "move_standard",
+                                "type": "move"
+                            }
+                        },
+                        {
+                            "type": "asm",
+                            "mnemonic": "lea",
+                            "operands": [
+                                {
+                                    "type": "reg",
+                                    "value": "rax",
+                                    "data": {
+                                        "bits": 64,
+                                        "id": 0,
+                                        "type": "gpr"
+                                    }
+                                },
+                                {
+                                    "type": "variable",
+                                    "value": "hello",
+                                    "data": null
+                                }
+                            ],
+                            "line": 39,
+                            "schema_info": {
+                                "family": "address_calc",
+                                "type": "address"
+                            }
+                        },
+                        {
+                            "type": "assignment",
+                            "target": "small_var",
+                            "value": "EOF",
+                            "line": 40
+                        }
+                    ],
+                    "line": 30
+                }
+            ],
+            "line": 6
+        }
+    ]
+}

@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HAC Web IDE</title>
+    <!-- Bootstrap 4 / Dark Theme Styling -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #1e1e1e;
+            --panel-bg: #252526;
+            --border-color: #333333;
+            --text-main: #d4d4d4;
+            --accent-blue: #007acc;
+        }
+
+        html, body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        /* Top Navbar */
+        .navbar {
+            background-color: var(--panel-bg);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1030;
+        }
+
+        /* Desktop Layout Flex Box */
+        .app-container {
+            display: flex;
+            flex-direction: row;
+            height: calc(100vh - 56px);
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background-color: var(--panel-bg);
+            border-right: 1px solid var(--border-color);
+            width: 260px;
+            flex-shrink: 0;
+            padding: 12px;
+            overflow-y: auto;
+            transition: all 0.2s ease-in-out;
+        }
+
+        /* Center Main Content (Editor + Console) */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            height: 100%;
+            background-color: var(--bg-dark);
+        }
+
+        /* EDITOR FLEXBOX LAYOUT */
+        .editor-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            height: 100%;
+        }
+
+        textarea.code-editor {
+            flex: 1;
+            width: 100%;
+            min-height: 0;
+            background-color: var(--bg-dark);
+            color: #dcdcaa;
+            border: none;
+            padding: 12px;
+            font-family: 'Consolas', 'Fira Code', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            resize: none;
+            outline: none;
+            tab-size: 4;
+            box-sizing: border-box;
+        }
+
+        /* Pipeline Right Panel */
+        .pipeline-panel {
+            background-color: var(--panel-bg);
+            border-left: 1px solid var(--border-color);
+            width: 360px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Bottom Console */
+        .console-panel {
+            height: 200px;
+            background-color: var(--bg-dark);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        pre.output-box {
+            background-color: var(--bg-dark);
+            color: #9cdcfe;
+            padding: 10px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 12px;
+            flex: 1;
+            margin: 0;
+            overflow: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .file-item {
+            cursor: pointer;
+            padding: 6px 8px;
+            border-radius: 4px;
+            color: #cccccc;
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+            word-break: break-all;
+        }
+
+        .file-item:hover, .file-item.active {
+            background-color: #37373d;
+            color: #ffffff;
+        }
+
+        .nav-tabs-dark {
+            background-color: #2d2d2d;
+            border-bottom: 1px solid var(--border-color);
+            flex-wrap: nowrap;
+            overflow-x: auto;
+        }
+
+        .nav-tabs-dark .nav-link {
+            color: #999;
+            border: none;
+            border-radius: 0;
+            padding: 8px 10px;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .nav-tabs-dark .nav-link.active {
+            background-color: var(--bg-dark);
+            color: #fff;
+            border-top: 2px solid var(--accent-blue);
+        }
+
+        /* Mobile & Portrait Overrides */
+        @media (max-width: 768px) {
+            .app-container {
+                flex-direction: column;
+                height: auto;
+                overflow-y: auto;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                max-height: 250px;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+                display: none;
+            }
+
+            .sidebar.show-mobile {
+                display: block;
+            }
+
+            .main-content {
+                height: auto;
+            }
+
+            .editor-container {
+                height: 50vh;
+                min-height: 350px;
+            }
+
+            .pipeline-panel {
+                width: 100%;
+                height: 300px;
+                border-left: none;
+                border-top: 1px solid var(--border-color);
+            }
+
+            .console-panel {
+                height: 220px;
+            }
+
+            .navbar-brand {
+                font-size: 16px;
+            }
+
+            .btn-sm {
+                padding: 0.25rem 0.4rem;
+                font-size: 0.785rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand navbar-dark px-2 px-md-3">
+        <!-- Mobile Sidebar Toggle -->
+        <button class="btn btn-outline-secondary btn-sm mr-2 d-md-none" onclick="toggleSidebar()" title="Toggle Files">
+            <i class="fas fa-folder"></i>
+        </button>
+
+        <a class="navbar-brand font-weight-bold mr-auto" href="#"><i class="fas fa-code text-primary mr-2"></i>HAC IDE</a>
+        
+        <div class="d-flex align-items-center">
+            <span id="status-indicator" class="badge badge-secondary mr-2">Ready</span>
+            
+            <a href="test.html" class="btn btn-sm btn-outline-warning mr-2" title="API Test Harness">
+                <i class="fas fa-vial mr-1"></i><span class="d-none d-sm-inline">API Test</span>
+            </a>
+            
+            <button class="btn btn-sm btn-success mr-2" onclick="saveFile()"><i class="fas fa-save mr-1"></i><span class="d-none d-sm-inline">Save</span></button>
+            <button class="btn btn-sm btn-primary" onclick="compileAndRun()"><i class="fas fa-play mr-1"></i><span class="d-none d-sm-inline">Run</span></button>
+        </div>
+    </nav>
+
+    <!-- MAIN APP WRAPPER -->
+    <div class="app-container">
+        
+        <!-- SIDEBAR: PROJECTS & FILES -->
+        <div id="sidebar" class="sidebar">
+            <div class="form-group mb-2">
+                <label class="small text-muted font-weight-bold mb-1">WORKSPACE PROJECT</label>
+                <select id="project-select" class="form-control form-control-sm bg-dark text-light border-secondary" onchange="switchProject(this.value)">
+                </select>
+            </div>
+
+            <div class="input-group input-group-sm mb-3">
+                <input type="text" id="new-project-name" class="form-control bg-dark text-light border-secondary" placeholder="New project...">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" onclick="createProject()"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+
+            <hr class="border-secondary my-2">
+
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="small text-muted font-weight-bold">FILES / SUBDIRECTORIES</span>
+                <button class="btn btn-link btn-sm text-light p-0" onclick="createFile()" title="Create file or subfolder path"><i class="fas fa-file-medical"></i></button>
+            </div>
+
+            <div id="file-list">
+            </div>
+        </div>
+
+        <!-- CENTER PANEL: EDITOR & CONSOLE -->
+        <div class="main-content">
+            <div class="editor-container">
+                <div class="bg-dark px-3 py-1 border-bottom border-secondary d-flex justify-content-between align-items-center">
+                    <span id="active-file-title" class="small text-muted">main.hac</span>
+                </div>
+                <textarea id="code-editor" class="code-editor" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="// Write HAC code here..."></textarea>
+            </div>
+
+            <!-- BOTTOM CONSOLE -->
+            <div class="console-panel">
+                <ul class="nav nav-tabs nav-tabs-dark">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="tab-cli" href="#" onclick="switchConsoleTab('cli'); return false;">CLI Logs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tab-errors" href="#" onclick="switchConsoleTab('errors'); return false;">Errors / Output</a>
+                    </li>
+                </ul>
+                <pre id="console-output" class="output-box">// Console ready...</pre>
+            </div>
+        </div>
+
+        <!-- RIGHT PANEL: PIPELINE STAGES -->
+        <div class="pipeline-panel">
+            <ul class="nav nav-tabs nav-tabs-dark">
+                <li class="nav-item">
+                    <a class="nav-link active" id="tab-lexer" href="#" onclick="switchPipelineTab('lexer'); return false;">Lexer</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="tab-parser" href="#" onclick="switchPipelineTab('parser'); return false;">AST</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="tab-ast_valid" href="#" onclick="switchPipelineTab('ast_valid'); return false;">Valid AST</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="tab-symbol" href="#" onclick="switchPipelineTab('symbol'); return false;">Symbols</a>
+                </li>
+            </ul>
+            <pre id="pipeline-output" class="output-box">// Pipeline output will display here upon compilation...</pre>
+        </div>
+
+    </div>
+
+    <!-- IDE LOGIC SCRIPT -->
+    <script>
+        // Global State
+        let currentProject = 'default';
+        let currentFile = 'main.hac';
+        let activePipelineStage = 'lexer';
+        let activeConsoleTab = 'cli';
+
+        let currentRunArtifacts = {
+            cli_logs: '',
+            errors: '',
+            lexer: null,
+            parser: null,
+            ast_valid: null,
+            symbol: null
+        };
+
+        // Helper: Generate timestamp prefix [HH:MM:SS]
+        function getTimestamp() {
+            const now = new Date();
+            const timeStr = now.toTimeString().split(' ')[0];
+            return `[${timeStr}] `;
+        }
+
+        // Helper: Format multi-line logs with timestamp prefix
+        function formatLogWithTimestamps(rawText) {
+            if (!rawText) return '';
+            const timestamp = getTimestamp();
+            return rawText
+                .split('\n')
+                .map(line => line.trim() ? `${timestamp}${line}` : line)
+                .join('\n');
+        }
+
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadProjectList();
+            await loadFileList();
+            if (currentFile) await openFile(currentFile);
+        });
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('show-mobile');
+        }
+
+        function logSystem(msg) {
+            console.log(`${getTimestamp()}[HAC IDE] ${msg}`);
+        }
+
+        // --- PROJECT MANAGEMENT ---
+        async function loadProjectList() {
+            try {
+                const res = await fetch('api.php?action=list_projects');
+                const data = await res.json();
+
+                if (data.status === 'success') {
+                    const select = document.getElementById('project-select');
+                    select.innerHTML = '';
+
+                    data.projects.forEach(proj => {
+                        const option = document.createElement('option');
+                        option.value = proj;
+                        option.textContent = proj;
+                        if (proj === currentProject) option.selected = true;
+                        select.appendChild(option);
+                    });
+                }
+            } catch (e) {
+                logSystem("Failed to load projects: " + e.message);
+            }
+        }
+
+        async function createProject() {
+            const input = document.getElementById('new-project-name');
+            const projectName = input.value.trim();
+            if (!projectName) return;
+
+            try {
+                const res = await fetch(`api.php?action=create_project&project=${encodeURIComponent(projectName)}`);
+                const data = await res.json();
+
+                if (data.status === 'success') {
+                    input.value = '';
+                    currentProject = data.project || projectName;
+                    
+                    await loadProjectList();
+                    document.getElementById('project-select').value = currentProject;
+                    await loadFileList();
+                    await openFile('main.hac');
+                    
+                    logSystem(`Created and switched to project '${currentProject}'`);
+                } else {
+                    alert(data.message || "Failed to create project");
+                }
+            } catch (e) {
+                logSystem("Error creating project: " + e.message);
+            }
+        }
+
+        async function switchProject(projectName) {
+            if (!projectName) return;
+            currentProject = projectName;
+            logSystem(`Switched to project '${currentProject}'`);
+            await loadFileList();
+        }
+
+        // --- RECURSIVE FILE LIST MANAGEMENT ---
+        async function loadFileList() {
+            try {
+                const res = await fetch(`api.php?action=list_files&project=${encodeURIComponent(currentProject)}`);
+                const data = await res.json();
+
+                const listContainer = document.getElementById('file-list');
+                listContainer.innerHTML = '';
+
+                if (data.status === 'success' && data.files.length > 0) {
+                    data.files.forEach(filePath => {
+                        const isSubdir = filePath.includes('/');
+                        const div = document.createElement('div');
+                        div.className = `file-item ${filePath === currentFile ? 'active' : ''}`;
+                        
+                        const iconClass = isSubdir ? 'fa-folder text-warning' : 'fa-file-code text-info';
+                        div.innerHTML = `<i class="far ${iconClass} mr-2"></i><span>${filePath}</span>`;
+                        
+                        div.onclick = () => {
+                            openFile(filePath);
+                            if (window.innerWidth <= 768) {
+                                document.getElementById('sidebar').classList.remove('show-mobile');
+                            }
+                        };
+                        listContainer.appendChild(div);
+                    });
+                    
+                    if (!data.files.includes(currentFile)) {
+                        currentFile = data.files[0];
+                    }
+                } else {
+                    listContainer.innerHTML = '<span class="small text-muted p-2 d-block">No files in workspace project</span>';
+                }
+            } catch (e) {
+                logSystem("Failed to load files: " + e.message);
+            }
+        }
+
+        async function createFile() {
+            const filePath = prompt("Enter file path (e.g. 'main.hac' or 'models/network/socket.hac'):");
+            if (!filePath) return;
+
+            try {
+                const res = await fetch(`api.php?action=create_file&project=${encodeURIComponent(currentProject)}&file=${encodeURIComponent(filePath)}`, {
+                    method: 'POST'
+                });
+                
+                const data = await res.json();
+
+                if (data.status === 'success') {
+                    await loadFileList();
+                    await openFile(data.file);
+                    logSystem(data.message || `Created file ${data.file}`);
+                } else {
+                    alert(data.message || "Failed to create file.");
+                }
+            } catch (e) {
+                logSystem("Error creating file: " + e.message);
+            }
+        }
+
+        async function openFile(filePath) {
+            currentFile = filePath;
+            document.getElementById('active-file-title').textContent = `${currentProject} / ${filePath}`;
+
+            try {
+                const res = await fetch(`api.php?action=load&project=${encodeURIComponent(currentProject)}&file=${encodeURIComponent(filePath)}`);
+                const data = await res.json();
+
+                if (data.status === 'success') {
+                    document.getElementById('code-editor').value = data.content;
+                    await loadFileList();
+                } else {
+                    alert(data.message || "Failed to load file.");
+                }
+            } catch (e) {
+                logSystem("Error opening file: " + e.message);
+            }
+        }
+
+        async function saveFile() {
+            const content = document.getElementById('code-editor').value;
+            const statusIndicator = document.getElementById('status-indicator');
+
+            try {
+                const res = await fetch(`api.php?action=save&project=${encodeURIComponent(currentProject)}&file=${encodeURIComponent(currentFile)}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ content: content })
+                });
+
+                const data = await res.json();
+
+                if (data.status === 'success') {
+                    statusIndicator.textContent = "Saved";
+                    statusIndicator.className = "badge badge-success mr-2";
+                    setTimeout(() => {
+                        statusIndicator.textContent = "Ready";
+                        statusIndicator.className = "badge badge-secondary mr-2";
+                    }, 2000);
+                } else {
+                    alert("Save Error: " + data.message);
+                }
+            } catch (e) {
+                alert("Save request failed: " + e.message);
+            }
+        }
+
+        // --- COMPILE ENGINE ---
+        async function compileAndRun() {
+            const codeContent = document.getElementById('code-editor').value;
+            const statusIndicator = document.getElementById('status-indicator');
+            
+            statusIndicator.textContent = "Compiling...";
+            statusIndicator.className = "badge badge-warning mr-2";
+
+            try {
+                const res = await fetch(`api.php?action=compile_and_fetch&project=${encodeURIComponent(currentProject)}&file=${encodeURIComponent(currentFile)}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ content: codeContent })
+                });
+
+                const response = await res.json();
+                
+                if (response.status === 'success') {
+                    statusIndicator.textContent = "Build OK";
+                    statusIndicator.className = "badge badge-success mr-2";
+
+                    currentRunArtifacts.cli_logs = formatLogWithTimestamps(response.cli_logs) || `${getTimestamp()}No CLI output produced.`;
+                    currentRunArtifacts.errors   = formatLogWithTimestamps(response.errors) || `${getTimestamp()}0 Errors`;
+                    
+                    if (response.artifacts) {
+                        currentRunArtifacts.lexer     = response.artifacts.lexer;
+                        currentRunArtifacts.parser    = response.artifacts.parser;
+                        currentRunArtifacts.ast_valid = response.artifacts.ast_valid;
+                        currentRunArtifacts.symbol    = response.artifacts.symbol;
+                    }
+
+                    renderPipelineOutput(currentRunArtifacts[activePipelineStage]);
+                    renderConsoleOutput();
+                } else {
+                    statusIndicator.textContent = "Build Failed";
+                    statusIndicator.className = "badge badge-danger mr-2";
+                    currentRunArtifacts.errors = formatLogWithTimestamps(response.message || "Compilation error");
+                    if (response.cli_logs) {
+                        currentRunArtifacts.cli_logs = formatLogWithTimestamps(response.cli_logs);
+                    }
+                    renderConsoleOutput();
+                }
+
+            } catch (err) {
+                statusIndicator.textContent = "Error";
+                statusIndicator.className = "badge badge-danger mr-2";
+                currentRunArtifacts.errors = formatLogWithTimestamps("Execution Error: " + err.message);
+                switchConsoleTab('errors');
+            }
+        }
+
+        // --- UI TAB SWITCHERS ---
+        function switchPipelineTab(stage) {
+            activePipelineStage = stage;
+            
+            ['lexer', 'parser', 'ast_valid', 'symbol'].forEach(s => {
+                const btn = document.getElementById(`tab-${s}`);
+                if (btn) btn.classList.remove('active');
+            });
+            document.getElementById(`tab-${stage}`).classList.add('active');
+
+            if (currentRunArtifacts[stage]) {
+                renderPipelineOutput(currentRunArtifacts[stage]);
+            } else {
+                compileAndRun();
+            }
+        }
+
+        function switchConsoleTab(tab) {
+            activeConsoleTab = tab;
+            
+            document.getElementById('tab-cli').classList.remove('active');
+            document.getElementById('tab-errors').classList.remove('active');
+            document.getElementById(`tab-${tab}`).classList.add('active');
+
+            renderConsoleOutput();
+        }
+
+        function renderPipelineOutput(data) {
+            const outputEl = document.getElementById('pipeline-output');
+            if (!outputEl) return;
+
+            if (!data) {
+                outputEl.textContent = "// No pipeline stage output available.\n// Press ▶ Run to build.";
+                return;
+            }
+
+            outputEl.textContent = (typeof data === 'object') ? JSON.stringify(data, null, 2) : String(data);
+        }
+
+        function renderConsoleOutput() {
+            const consoleEl = document.getElementById('console-output');
+            if (!consoleEl) return;
+
+            if (activeConsoleTab === 'cli') {
+                consoleEl.textContent = currentRunArtifacts.cli_logs || `${getTimestamp()}// No CLI output generated yet.`;
+            } else {
+                consoleEl.textContent = currentRunArtifacts.errors || `${getTimestamp()}// No errors reported.`;
+            }
+        }
+    </script>
+</body>
+</html>

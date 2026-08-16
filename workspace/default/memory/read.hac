@@ -1,0 +1,11 @@
+//memory/read.hac
+//Created 2026-08-01 07:02:36
+namespace default.memory.read {
+  data {
+    u64 base 0x8000;
+  }
+
+  function set_address(u64 addr) : u64 {
+    return 64;
+  }
+}
