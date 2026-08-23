@@ -235,10 +235,24 @@ switch ($action) {
                 'status' => 'lowered',
                 'ir'     => $irProgram
             ];
+            
+            $ir1Path = $buildSubDir . '/' . $baseName . '.ir1';
+            file_put_contents($ir1Path, json_encode($ir1Artifact, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+            
+            $ir1Array = json_decode(json_encode($irProgram, JSON_PRETTY_PRINT),true);
+            $stage2Lowerer = new \Asm\Lowering\Stage2\Stage2Lowerer();
+            $ir2Artifact = $stage2Lowerer->lower($ir1Array);
 
             $ir1Path = $buildSubDir . '/' . $baseName . '.ir1';
             file_put_contents($ir1Path, json_encode($ir1Artifact, JSON_PRETTY_PRINT));
             $savedFiles['ir1'] = str_replace($projectPath . '/', '', $ir1Path);
+
+
+            $ir2Path = $buildSubDir . '/' . $baseName . '.ir2';
+            file_put_contents($ir2Path, json_encode($ir2Artifact, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+            $savedFiles['ir2'] = str_replace($projectPath . '/' , '', $ir2Path);
+            
+            $response['artifacts']['lowering_2'] = $ir2Artifact;
 
             // Respond back to IDE interface
             echo json_encode([
@@ -250,7 +264,8 @@ switch ($action) {
                     'parser'    => $astArtifact,
                     'ast_valid' => $astValidArtifact,
                     'symbol'    => $symbolArtifact,
-                    'ir1'       => $ir1Artifact
+                    'lowering1' => $ir1Artifact,
+                    'lowering2' => $ir2Artifact,
                 ],
                 'saved_artifacts' => $savedFiles
             ]);

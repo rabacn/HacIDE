@@ -300,6 +300,12 @@
                 <li class="nav-item">
                     <a class="nav-link" id="tab-symbol" href="#" onclick="switchPipelineTab('symbol'); return false;">Symbols</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="tab-lowering_1" href="#" onclick="switchPipelineTab('lowering_1'); return false;">Lowering 1</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="tab-lowering_2" href="#" onclick="switchPipelineTab('lowering_2'); return false;">Lowering 2</a>
+                </li>
             </ul>
             <pre id="pipeline-output" class="output-box">// Pipeline output will display here upon compilation...</pre>
         </div>
@@ -320,7 +326,9 @@
             lexer: null,
             parser: null,
             ast_valid: null,
-            symbol: null
+            symbol: null,
+            lowering_1: null,
+            lowering_2: null
         };
 
         // Helper: Generate timestamp prefix [HH:MM:SS]
@@ -546,10 +554,12 @@
                     currentRunArtifacts.errors   = formatLogWithTimestamps(response.errors) || `${getTimestamp()}0 Errors`;
                     
                     if (response.artifacts) {
-                        currentRunArtifacts.lexer     = response.artifacts.lexer;
-                        currentRunArtifacts.parser    = response.artifacts.parser;
-                        currentRunArtifacts.ast_valid = response.artifacts.ast_valid;
-                        currentRunArtifacts.symbol    = response.artifacts.symbol;
+                        currentRunArtifacts.lexer      = response.artifacts.lexer;
+                        currentRunArtifacts.parser     = response.artifacts.parser;
+                        currentRunArtifacts.ast_valid  = response.artifacts.ast_valid;
+                        currentRunArtifacts.symbol     = response.artifacts.symbol;
+                        currentRunArtifacts.lowering_1 = response.artifacts.lowering_1 || response.artifacts.lowering1 || response.artifacts.lowering;
+                        currentRunArtifacts.lowering_2 = response.artifacts.lowering_2 || response.artifacts.lowering2;
                     }
 
                     renderPipelineOutput(currentRunArtifacts[activePipelineStage]);
@@ -576,7 +586,7 @@
         function switchPipelineTab(stage) {
             activePipelineStage = stage;
             
-            ['lexer', 'parser', 'ast_valid', 'symbol'].forEach(s => {
+            ['lexer', 'parser', 'ast_valid', 'symbol', 'lowering_1', 'lowering_2'].forEach(s => {
                 const btn = document.getElementById(`tab-${s}`);
                 if (btn) btn.classList.remove('active');
             });
