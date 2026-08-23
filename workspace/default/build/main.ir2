@@ -3,7 +3,7 @@
     "source_stage": "lowering_phase_1",
     "metadata": {
         "target": "HAC-TAC-IR2",
-        "timestamp": "2026-08-23 09:35:06"
+        "timestamp": "2026-08-23 09:44:33"
     },
     "functions": [],
     "instructions": [
@@ -137,6 +137,29 @@
                     }
                 ],
                 "line": 40
+            }
+        },
+        {
+            "op": "EVAL",
+            "dst": "$t7",
+            "raw_type": "Unknown",
+            "data": {
+                "mnemonic": "STORE_8",
+                "operands": [
+                    {
+                        "type": "imm",
+                        "value": "0"
+                    },
+                    {
+                        "type": "mem",
+                        "value": {
+                            "symbolName": "cs1",
+                            "offset": 4,
+                            "bitWidth": 1
+                        }
+                    }
+                ],
+                "line": 41
             }
         }
     ]

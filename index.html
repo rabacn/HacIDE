@@ -70,6 +70,30 @@
             height: 100%;
         }
 
+        .editor-wrapper {
+            flex: 1;
+            display: flex;
+            min-height: 0;
+            position: relative;
+            background-color: var(--bg-dark);
+        }
+
+        /* Line Numbers Column */
+        .line-numbers {
+            width: 45px;
+            min-width: 45px;
+            padding: 12px 10px 12px 5px;
+            background-color: var(--bg-dark);
+            color: #6e7681;
+            border-right: 1px solid var(--border-color);
+            font-family: 'Consolas', 'Fira Code', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            text-align: right;
+            user-select: none;
+            overflow: hidden; /* Scrolling is synced with textarea */
+        }
+
         textarea.code-editor {
             flex: 1;
             width: 100%;
@@ -85,6 +109,9 @@
             outline: none;
             tab-size: 4;
             box-sizing: border-box;
+            white-space: pre; /* Prevents wrapping so line numbers stay perfectly aligned */
+            overflow-wrap: normal;
+            overflow-x: auto;
         }
 
         /* Pipeline Right Panel */
@@ -268,7 +295,11 @@
                 <div class="bg-dark px-3 py-1 border-bottom border-secondary d-flex justify-content-between align-items-center">
                     <span id="active-file-title" class="small text-muted">main.hac</span>
                 </div>
-                <textarea id="code-editor" class="code-editor" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="// Write HAC code here..."></textarea>
+                <!-- Custom Editor Wrapper with Line Numbers -->
+                <div class="editor-wrapper">
+                    <div id="line-numbers" class="line-numbers">1</div>
+                    <textarea id="code-editor" class="code-editor" wrap="off" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="// Write HAC code here..."></textarea>
+                </div>
             </div>
 
             <!-- BOTTOM CONSOLE -->
@@ -331,6 +362,39 @@
             lowering_2: null
         };
 
+        // --- LINE NUMBERS LOGIC ---
+        const codeEditor = document.getElementById('code-editor');
+        const lineNumbers = document.getElementById('line-numbers');
+
+        function updateLineNumbers() {
+            const lines = codeEditor.value.split('\n').length;
+            // Generate <br> separated string of numbers. Array fill approach is extremely fast for this.
+            lineNumbers.innerHTML = Array(lines).fill(0).map((_, i) => i + 1).join('<br>');
+        }
+
+        // Sync vertical scroll between textarea and line numbers
+        codeEditor.addEventListener('scroll', () => {
+            lineNumbers.scrollTop = codeEditor.scrollTop;
+        });
+
+        // Update lines whenever the user types
+        codeEditor.addEventListener('input', updateLineNumbers);
+
+        // Allow pressing "Tab" to insert 4 spaces instead of shifting focus
+        codeEditor.addEventListener('keydown', function(e) {
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                const start = this.selectionStart;
+                const end = this.selectionEnd;
+
+                // set textarea value to: text before caret + tab + text after caret
+                this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+                this.selectionStart = this.selectionEnd = start + 4;
+                updateLineNumbers();
+            }
+        });
+
+
         // Helper: Generate timestamp prefix [HH:MM:SS]
         function getTimestamp() {
             const now = new Date();
@@ -350,6 +414,7 @@
 
         // --- INITIALIZATION ---
         document.addEventListener('DOMContentLoaded', async () => {
+            updateLineNumbers(); // Initialize line 1
             await loadProjectList();
             await loadFileList();
             if (currentFile) await openFile(currentFile);
@@ -492,6 +557,7 @@
 
                 if (data.status === 'success') {
                     document.getElementById('code-editor').value = data.content;
+                    updateLineNumbers(); // Call here to map lines to loaded file
                     await loadFileList();
                 } else {
                     alert(data.message || "Failed to load file.");
