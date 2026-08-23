@@ -177,7 +177,7 @@ switch ($action) {
         ensure_directory($buildSubDir);
 
         try {
-            // Instantiate Lexer with the code content passed as a parameter
+            // 1. Lexical Analysis
             $schemaClass = new \Asm\Arch\x86_64();
             $schema = $schemaClass->get_schema();
             $lexer = new \Asm\Lexer\Lexer($schema);
@@ -192,15 +192,14 @@ switch ($action) {
                 }
             }
             
-            $lexerArtifact    = $tokens;
-            
-            $savedFiles =[];
+            $lexerArtifact = $tokens;
+            $savedFiles = [];
 
             $lexPath = $buildSubDir . '/' . $baseName . '.lex';
             file_put_contents($lexPath, json_encode($lexerArtifact, JSON_PRETTY_PRINT));
             $savedFiles['lexer'] = str_replace($projectPath . '/', '', $lexPath);
 
-            // Run Parser
+            // 2. Syntax Analysis (Parser)
             $parser = new \Asm\Parser\Parser($schema);
             $parser->processTokens($tokens);
             $ast = $parser->getAST();
@@ -211,30 +210,14 @@ switch ($action) {
             file_put_contents($astPath, json_encode($astArtifact, JSON_PRETTY_PRINT));
             $savedFiles['parser'] = str_replace($projectPath . '/', '', $astPath);
 
-            // Run Semantic Analyser
+            // 3. Semantic Analysis
             $SA = new \Asm\Semantic\SemanticAnalyzer('x86_64');
             $SA->processAST($ast);
             $vast = $SA->get_vast();
             $symbolTable = $SA->get_symbol();
-            
 
-            // Run main compiler engine
-   //         $asmOutputFile = $buildSubDir . '/' . $baseName . '.asm';
-  //          $compiler = new \Asm\Compiler\Compiler($projectPath);
-   //         $compiler->compile($filePath, $asmOutputFile);
-
-            // Structure compiler outputs into JSON artifacts
-//            $astArtifact      = $ast;
-//            $astArtifact = ['AST' => 'Parsed', 'ast' => $ast];
             $astValidArtifact = ['status' => 'validated', 'ast' => $vast];
             $symbolArtifact   = ['status' => 'filled', 'symbol' => $symbolTable];
-
-            // Save compiler artifacts to target build directory
-
-
-//            $astPath = $buildSubDir . '/' . $baseName . '.ast';
-//            file_put_contents($astPath, json_encode($astArtifact, JSON_PRETTY_PRINT));
-//            $savedFiles['parser'] = str_replace($projectPath . '/', '', $astPath);
 
             $astValidPath = $buildSubDir . '/' . $baseName . '.ast_valid';
             file_put_contents($astValidPath, json_encode($astValidArtifact, JSON_PRETTY_PRINT));
@@ -244,16 +227,30 @@ switch ($action) {
             file_put_contents($symbolPath, json_encode($symbolArtifact, JSON_PRETTY_PRINT));
             $savedFiles['symbol'] = str_replace($projectPath . '/', '', $symbolPath);
 
+            // 4. Stage 1 Lowering (AST -> Mid-Level IR)
+            $stage1Lowerer = new \Asm\Lowering\Stage1\Stage1Lowerer();
+            $irProgram = $stage1Lowerer->lower($vast);
+
+            $ir1Artifact = [
+                'status' => 'lowered',
+                'ir'     => $irProgram
+            ];
+
+            $ir1Path = $buildSubDir . '/' . $baseName . '.ir1';
+            file_put_contents($ir1Path, json_encode($ir1Artifact, JSON_PRETTY_PRINT));
+            $savedFiles['ir1'] = str_replace($projectPath . '/', '', $ir1Path);
+
             // Respond back to IDE interface
             echo json_encode([
                 'status'   => 'success',
-                'cli_logs' => "[HAC Compiler Executed Successfully]\nGenerated assembly output: {$baseName}.asm\n\nArtifacts written:\n - " . implode("\n - ", $savedFiles),
+                'cli_logs' => "[HAC Compiler Executed Successfully]\nArtifacts written:\n - " . implode("\n - ", $savedFiles),
                 'errors'   => '0 Errors',
                 'artifacts' => [
                     'lexer'     => $lexerArtifact,
                     'parser'    => $astArtifact,
                     'ast_valid' => $astValidArtifact,
-                    'symbol'    => $symbolArtifact
+                    'symbol'    => $symbolArtifact,
+                    'ir1'       => $ir1Artifact
                 ],
                 'saved_artifacts' => $savedFiles
             ]);
