@@ -213,6 +213,7 @@ switch ($action) {
             // 3. Semantic Analysis
             $SA = new \Asm\Semantic\SemanticAnalyzer('x86_64');
             $SA->processAST($ast);
+            $at = $SA->get_at();
             $vast = $SA->get_vast();
             $symbolTable = $SA->get_symbol();
 
@@ -238,21 +239,31 @@ switch ($action) {
             
             $ir1Path = $buildSubDir . '/' . $baseName . '.ir1';
             file_put_contents($ir1Path, json_encode($ir1Artifact, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
-            
-            $ir1Array = json_decode(json_encode($irProgram, JSON_PRETTY_PRINT),true);
+            $savedFiles['ir1'] = str_replace($projectPath . '/', '', $ir1Path);
+
+            // 5. Stage 2 Lowering (Mid-Level IR -> Target-Specific IR)
+            $ir1Array = json_decode(json_encode($irProgram, JSON_PRETTY_PRINT), true);
             $stage2Lowerer = new \Asm\Lowering\Stage2\Stage2Lowerer();
             $ir2Artifact = $stage2Lowerer->lower($ir1Array);
 
-            $ir1Path = $buildSubDir . '/' . $baseName . '.ir1';
-            file_put_contents($ir1Path, json_encode($ir1Artifact, JSON_PRETTY_PRINT));
-            $savedFiles['ir1'] = str_replace($projectPath . '/', '', $ir1Path);
-
-
             $ir2Path = $buildSubDir . '/' . $baseName . '.ir2';
             file_put_contents($ir2Path, json_encode($ir2Artifact, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
-            $savedFiles['ir2'] = str_replace($projectPath . '/' , '', $ir2Path);
-            
-            $response['artifacts']['lowering_2'] = $ir2Artifact;
+            $savedFiles['ir2'] = str_replace($projectPath . '/', '', $ir2Path);
+
+            // 6. Backend Emitter (NASM Assembly Generation)
+            $asmPath = $buildSubDir . '/' . $baseName . '.asm';
+            $nasmEmitter = new \Asm\Backend\Nasm\NasmEmitter($at);
+
+            // Pass the lowered IR representation to the emitter
+            // (Extracts underlying IR structure if wrapped in an array)
+            $targetIr = is_array($ir2Artifact) && isset($ir2Artifact['ir']) 
+                ? $ir2Artifact['ir'] 
+                : ($ir2Artifact instanceof \Asm\IR\IrProgram ? $ir2Artifact : $irProgram);
+
+            $nasmEmitter->emit($targetIr, $asmPath);
+            $savedFiles['asm'] = str_replace($projectPath . '/', '', $asmPath);
+
+            $nasmCode = file_exists($asmPath) ? file_get_contents($asmPath) : '';
 
             // Respond back to IDE interface
             echo json_encode([
@@ -266,6 +277,7 @@ switch ($action) {
                     'symbol'    => $symbolArtifact,
                     'lowering1' => $ir1Artifact,
                     'lowering2' => $ir2Artifact,
+                    'nasm'      => $nasmCode
                 ],
                 'saved_artifacts' => $savedFiles
             ]);

@@ -7,28 +7,38 @@
                 "fieldOffsets": {
                     "control": {
                         "offset": 0,
+                        "bitOffset": 0,
+                        "bitWidth": null,
                         "size": 4,
-                        "bitWidth": null
+                        "dataType": "u32"
                     },
                     "enable": {
                         "offset": 4,
+                        "bitOffset": 0,
+                        "bitWidth": 1,
                         "size": 2,
-                        "bitWidth": 1
+                        "dataType": "u16"
                     },
                     "mode": {
-                        "offset": 6,
+                        "offset": 4,
+                        "bitOffset": 4,
+                        "bitWidth": 4,
                         "size": 2,
-                        "bitWidth": 4
+                        "dataType": "u16"
                     },
                     "error_code": {
-                        "offset": 8,
+                        "offset": 5,
+                        "bitOffset": 0,
+                        "bitWidth": 8,
                         "size": 2,
-                        "bitWidth": 8
+                        "dataType": "u16"
                     },
                     "data_buffer": {
                         "offset": 16,
+                        "bitOffset": 0,
+                        "bitWidth": null,
                         "size": 4,
-                        "bitWidth": null
+                        "dataType": "u32"
                     }
                 },
                 "name": "ControlStatusRegister"
@@ -37,30 +47,78 @@
         "symbolTable": {
             "small_var": {
                 "type": "u32",
-                "size": 4
+                "size": 4,
+                "capacity": null,
+                "value": null
             },
             "hello": {
                 "type": "string",
-                "size": 0
+                "size": 3,
+                "capacity": null,
+                "value": "Hello World"
             },
             "EOF": {
                 "type": "u32",
-                "size": 4
+                "size": 4,
+                "capacity": null,
+                "value": "32"
             },
             "tmp": {
                 "type": "u16",
-                "size": 2
+                "size": 2,
+                "capacity": null,
+                "value": "0"
+            },
+            "tmp1": {
+                "type": "u16",
+                "size": 2,
+                "capacity": null,
+                "value": "3"
             },
             "my_var": {
                 "type": "char",
-                "size": 1
+                "size": 1,
+                "capacity": null,
+                "value": " "
             },
             "cs1": {
                 "type": "ControlStatusRegister",
-                "size": 20
+                "size": 20,
+                "capacity": null,
+                "value": null
             }
         },
         "instructions": [
+            {
+                "mnemonic": "LABEL",
+                "operands": [
+                    {
+                        "type": "imm",
+                        "value": "test"
+                    }
+                ],
+                "line": 31
+            },
+            {
+                "mnemonic": "RET",
+                "operands": [
+                    {
+                        "type": "imm",
+                        "value": "34"
+                    }
+                ],
+                "line": 32
+            },
+            {
+                "mnemonic": "LABEL",
+                "operands": [
+                    {
+                        "type": "imm",
+                        "value": "main"
+                    }
+                ],
+                "line": 35
+            },
             {
                 "mnemonic": "STORE_8",
                 "operands": [
@@ -73,11 +131,11 @@
                         "value": {
                             "symbolName": "my_var",
                             "offset": 0,
-                            "bitWidth": null
+                            "bitWidth": 8
                         }
                     }
                 ],
-                "line": 31
+                "line": 36
             },
             {
                 "mnemonic": "push",
@@ -87,12 +145,12 @@
                         "value": "rbx"
                     }
                 ],
-                "line": 35
+                "line": 40
             },
             {
                 "mnemonic": "nop",
                 "operands": [],
-                "line": 36
+                "line": 41
             },
             {
                 "mnemonic": "mov",
@@ -106,7 +164,7 @@
                         "value": "0x3F"
                     }
                 ],
-                "line": 37
+                "line": 42
             },
             {
                 "mnemonic": "mov",
@@ -120,7 +178,7 @@
                         "value": "small_var"
                     }
                 ],
-                "line": 38
+                "line": 43
             },
             {
                 "mnemonic": "lea",
@@ -134,29 +192,158 @@
                         "value": "hello"
                     }
                 ],
-                "line": 39
+                "line": 44
             },
             {
-                "mnemonic": "STORE_8",
+                "mnemonic": "MOV",
                 "operands": [
+                    {
+                        "type": "var",
+                        "value": "%temp_0"
+                    },
                     {
                         "type": "mem",
                         "value": {
                             "symbolName": "cs1",
-                            "offset": 6,
-                            "bitWidth": 4
+                            "offset": 4,
+                            "bitWidth": 16
                         }
+                    }
+                ],
+                "line": 45
+            },
+            {
+                "mnemonic": "SHR",
+                "operands": [
+                    {
+                        "type": "var",
+                        "value": "%temp_0"
+                    },
+                    {
+                        "type": "imm",
+                        "value": "4"
+                    }
+                ],
+                "line": 45
+            },
+            {
+                "mnemonic": "AND",
+                "operands": [
+                    {
+                        "type": "var",
+                        "value": "%temp_0"
+                    },
+                    {
+                        "type": "imm",
+                        "value": "15"
+                    }
+                ],
+                "line": 45
+            },
+            {
+                "mnemonic": "STORE_32",
+                "operands": [
+                    {
+                        "type": "var",
+                        "value": "%temp_0"
                     },
                     {
                         "type": "mem",
                         "value": {
                             "symbolName": "small_var",
                             "offset": 0,
-                            "bitWidth": null
+                            "bitWidth": 32
                         }
                     }
                 ],
-                "line": 40
+                "line": 45
+            },
+            {
+                "mnemonic": "CALL",
+                "operands": [
+                    {
+                        "type": "imm",
+                        "value": "test"
+                    }
+                ],
+                "line": 46
+            },
+            {
+                "mnemonic": "STORE_16",
+                "operands": [
+                    {
+                        "type": "reg",
+                        "value": "ax"
+                    },
+                    {
+                        "type": "mem",
+                        "value": {
+                            "symbolName": "tmp1",
+                            "offset": 0,
+                            "bitWidth": 16
+                        }
+                    }
+                ],
+                "line": 46
+            },
+            {
+                "mnemonic": "ADD",
+                "operands": [
+                    {
+                        "type": "var",
+                        "value": "%temp_1"
+                    },
+                    {
+                        "type": "var",
+                        "value": "tmp1"
+                    },
+                    {
+                        "type": "imm",
+                        "value": "5"
+                    }
+                ],
+                "line": 47
+            },
+            {
+                "mnemonic": "IMUL",
+                "operands": [
+                    {
+                        "type": "var",
+                        "value": "%temp_2"
+                    },
+                    {
+                        "type": "imm",
+                        "value": "2"
+                    },
+                    {
+                        "type": "var",
+                        "value": "%temp_1"
+                    }
+                ],
+                "line": 47
+            },
+            {
+                "mnemonic": "STORE_32",
+                "operands": [
+                    {
+                        "type": "var",
+                        "value": "%temp_2"
+                    },
+                    {
+                        "type": "mem",
+                        "value": {
+                            "symbolName": "small_var",
+                            "offset": 0,
+                            "bitWidth": 32
+                        }
+                    }
+                ],
+                "line": 47
+            },
+            {
+                "mnemonic": "RET",
+                "operands": [],
+                "line": 35
             }
         ]
     }

@@ -150,8 +150,35 @@
                             "line": 27,
                             "symbol_id": 4,
                             "resolved_bits": 16
+                        },
+                        {
+                            "type": "variable",
+                            "label": "tmp1",
+                            "value": "3",
+                            "baseTypeInfo": "u16",
+                            "capacityTypeInfo": null,
+                            "align": null,
+                            "is_const": false,
+                            "line": 28,
+                            "symbol_id": 5,
+                            "resolved_bits": 16
                         }
                     ]
+                },
+                {
+                    "type": "function",
+                    "name": "test",
+                    "params": [],
+                    "return_type": "u16",
+                    "body": [
+                        {
+                            "type": "return_statement",
+                            "value": "34",
+                            "line": 32
+                        }
+                    ],
+                    "line": 31,
+                    "scope_path": "global.default.test"
                 },
                 {
                     "type": "function",
@@ -167,8 +194,8 @@
                             "capacityTypeInfo": 1,
                             "align": null,
                             "is_const": false,
-                            "line": 31,
-                            "symbol_id": 5,
+                            "line": 36,
+                            "symbol_id": 6,
                             "resolved_bits": 32
                         },
                         {
@@ -179,8 +206,8 @@
                             "capacityTypeInfo": null,
                             "align": null,
                             "is_const": false,
-                            "line": 32,
-                            "symbol_id": 6,
+                            "line": 37,
+                            "symbol_id": 7,
                             "resolved_bits": 0
                         },
                         {
@@ -197,7 +224,7 @@
                                     }
                                 }
                             ],
-                            "line": 35,
+                            "line": 40,
                             "schema_info": {
                                 "family": "plus_rd",
                                 "base": 80,
@@ -208,7 +235,7 @@
                             "type": "asm",
                             "mnemonic": "nop",
                             "operands": [],
-                            "line": 36,
+                            "line": 41,
                             "schema_info": {
                                 "family": "no_args",
                                 "base": 144,
@@ -235,7 +262,7 @@
                                     "resolved_bits": 64
                                 }
                             ],
-                            "line": 37,
+                            "line": 42,
                             "schema_info": {
                                 "family": "move_standard",
                                 "type": "move"
@@ -261,7 +288,7 @@
                                     "resolved_bits": 32
                                 }
                             ],
-                            "line": 38,
+                            "line": 43,
                             "schema_info": {
                                 "family": "move_standard",
                                 "type": "move"
@@ -287,7 +314,7 @@
                                     "resolved_bits": 64
                                 }
                             ],
-                            "line": 39,
+                            "line": 44,
                             "schema_info": {
                                 "family": "address_calc",
                                 "type": "address"
@@ -295,12 +322,62 @@
                         },
                         {
                             "type": "assignment",
-                            "target": "small_var",
-                            "value": "EOF",
-                            "line": 40
+                            "target": {
+                                "type": "variable",
+                                "name": "small_var"
+                            },
+                            "value": {
+                                "type": "member_access",
+                                "object": "cs1",
+                                "member": "mode",
+                                "path": [
+                                    "cs1",
+                                    "mode"
+                                ],
+                                "full": "cs1.mode"
+                            },
+                            "line": 45
+                        },
+                        {
+                            "type": "assignment",
+                            "target": {
+                                "type": "variable",
+                                "name": "tmp1"
+                            },
+                            "value": {
+                                "type": "function_call",
+                                "name": "test",
+                                "args": [],
+                                "line": 46
+                            },
+                            "line": 46
+                        },
+                        {
+                            "type": "assignment",
+                            "target": {
+                                "type": "variable",
+                                "name": "small_var"
+                            },
+                            "value": {
+                                "type": "binary_op",
+                                "operator": "*",
+                                "left": "2",
+                                "right": {
+                                    "type": "binary_op",
+                                    "operator": "+",
+                                    "left": {
+                                        "type": "variable",
+                                        "name": "tmp1"
+                                    },
+                                    "right": "5",
+                                    "line": 47
+                                },
+                                "line": 47
+                            },
+                            "line": 47
                         }
                     ],
-                    "line": 30,
+                    "line": 35,
                     "scope_path": "global.default.main"
                 }
             ],

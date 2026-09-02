@@ -55,8 +55,25 @@
                     "is_mutable": false,
                     "borrow_state": "none",
                     "borrow_count": 0
+                },
+                "tmp1": {
+                    "id": 5,
+                    "name": "tmp1",
+                    "scope_path": "global.default",
+                    "base_type": "u16",
+                    "capacity": null,
+                    "bits": 16,
+                    "is_mutable": true,
+                    "borrow_state": "none",
+                    "borrow_count": 0
                 }
             }
+        },
+        "global.default.test": {
+            "scope_path": "global.default.test",
+            "parent": "global.default",
+            "type": "function",
+            "symbols": []
         },
         "global.default.main": {
             "scope_path": "global.default.main",
@@ -64,7 +81,7 @@
             "type": "function",
             "symbols": {
                 "my_var": {
-                    "id": 5,
+                    "id": 6,
                     "name": "my_var",
                     "scope_path": "global.default.main",
                     "base_type": "char",
@@ -75,7 +92,7 @@
                     "borrow_count": 0
                 },
                 "cs1": {
-                    "id": 6,
+                    "id": 7,
                     "name": "cs1",
                     "scope_path": "global.default.main",
                     "base_type": "ControlStatusRegister",

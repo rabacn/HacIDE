@@ -25,6 +25,11 @@ namespace default {
         string [15] hello = "Hello World";
         const u32 EOF = 32;
         const u16 tmp =0;
+        u16 tmp1 = 3;
+    }
+
+    function test() : u16 {
+        return 34;
     }
             
     function main() : null {
@@ -38,5 +43,7 @@ namespace default {
         mov eax, small_var;
         lea rax, hello;
         small_var = cs1.mode;
+        tmp1 = test();
+        small_var = 2*(tmp1 + 5);
     }
 }

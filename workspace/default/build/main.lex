@@ -585,161 +585,289 @@
     },
     {
         "id": 73,
-        "type": "}",
-        "value": "}",
+        "type": "KEYWORD",
+        "value": "u16",
         "line": 28,
-        "col": 5,
+        "col": 9,
         "data": null
     },
     {
         "id": 74,
-        "type": "KEYWORD",
-        "value": "function",
-        "line": 30,
-        "col": 5,
+        "type": "IDENT",
+        "value": "tmp1",
+        "line": 28,
+        "col": 13,
         "data": null
     },
     {
         "id": 75,
-        "type": "IDENT",
-        "value": "main",
-        "line": 30,
-        "col": 14,
-        "data": null
-    },
-    {
-        "id": 76,
-        "type": "(",
-        "value": "(",
-        "line": 30,
+        "type": "=",
+        "value": "=",
+        "line": 28,
         "col": 18,
         "data": null
     },
     {
+        "id": 76,
+        "type": "NUMBER",
+        "value": "3",
+        "line": 28,
+        "col": 20,
+        "data": "3"
+    },
+    {
         "id": 77,
-        "type": ")",
-        "value": ")",
-        "line": 30,
-        "col": 19,
+        "type": ";",
+        "value": ";",
+        "line": 28,
+        "col": 21,
         "data": null
     },
     {
         "id": 78,
-        "type": ":",
-        "value": ":",
-        "line": 30,
-        "col": 21,
+        "type": "}",
+        "value": "}",
+        "line": 29,
+        "col": 5,
         "data": null
     },
     {
         "id": 79,
         "type": "KEYWORD",
-        "value": "null",
-        "line": 30,
-        "col": 23,
+        "value": "function",
+        "line": 31,
+        "col": 5,
         "data": null
     },
     {
         "id": 80,
-        "type": "{",
-        "value": "{",
-        "line": 30,
-        "col": 28,
+        "type": "IDENT",
+        "value": "test",
+        "line": 31,
+        "col": 14,
         "data": null
     },
     {
         "id": 81,
-        "type": "KEYWORD",
-        "value": "var",
-        "line": 31,
-        "col": 9,
-        "data": null
-    },
-    {
-        "id": 82,
-        "type": "KEYWORD",
-        "value": "char",
-        "line": 31,
-        "col": 13,
-        "data": null
-    },
-    {
-        "id": 83,
-        "type": "IDENT",
-        "value": "my_var",
+        "type": "(",
+        "value": "(",
         "line": 31,
         "col": 18,
         "data": null
     },
     {
-        "id": 84,
-        "type": "=",
-        "value": "=",
+        "id": 82,
+        "type": ")",
+        "value": ")",
         "line": 31,
-        "col": 25,
+        "col": 19,
+        "data": null
+    },
+    {
+        "id": 83,
+        "type": ":",
+        "value": ":",
+        "line": 31,
+        "col": 21,
+        "data": null
+    },
+    {
+        "id": 84,
+        "type": "KEYWORD",
+        "value": "u16",
+        "line": 31,
+        "col": 23,
         "data": null
     },
     {
         "id": 85,
-        "type": "STRING",
-        "value": " ",
+        "type": "{",
+        "value": "{",
         "line": 31,
-        "col": 28,
+        "col": 27,
         "data": null
     },
     {
         "id": 86,
-        "type": ";",
-        "value": ";",
-        "line": 31,
-        "col": 30,
+        "type": "KEYWORD",
+        "value": "return",
+        "line": 32,
+        "col": 9,
         "data": null
     },
     {
         "id": 87,
-        "type": "KEYWORD",
-        "value": "var",
+        "type": "NUMBER",
+        "value": "34",
         "line": 32,
-        "col": 9,
-        "data": null
+        "col": 16,
+        "data": "34"
     },
     {
         "id": 88,
-        "type": "IDENT",
-        "value": "ControlStatusRegister",
+        "type": ";",
+        "value": ";",
         "line": 32,
-        "col": 13,
+        "col": 18,
         "data": null
     },
     {
         "id": 89,
-        "type": "IDENT",
-        "value": "cs1",
-        "line": 32,
-        "col": 35,
+        "type": "}",
+        "value": "}",
+        "line": 33,
+        "col": 5,
         "data": null
     },
     {
         "id": 90,
-        "type": ";",
-        "value": ";",
-        "line": 32,
-        "col": 38,
+        "type": "KEYWORD",
+        "value": "function",
+        "line": 35,
+        "col": 5,
         "data": null
     },
     {
         "id": 91,
-        "type": "MNEMONIC",
-        "value": "push",
+        "type": "IDENT",
+        "value": "main",
         "line": 35,
-        "col": 9,
+        "col": 14,
         "data": null
     },
     {
         "id": 92,
+        "type": "(",
+        "value": "(",
+        "line": 35,
+        "col": 18,
+        "data": null
+    },
+    {
+        "id": 93,
+        "type": ")",
+        "value": ")",
+        "line": 35,
+        "col": 19,
+        "data": null
+    },
+    {
+        "id": 94,
+        "type": ":",
+        "value": ":",
+        "line": 35,
+        "col": 21,
+        "data": null
+    },
+    {
+        "id": 95,
+        "type": "KEYWORD",
+        "value": "null",
+        "line": 35,
+        "col": 23,
+        "data": null
+    },
+    {
+        "id": 96,
+        "type": "{",
+        "value": "{",
+        "line": 35,
+        "col": 28,
+        "data": null
+    },
+    {
+        "id": 97,
+        "type": "KEYWORD",
+        "value": "var",
+        "line": 36,
+        "col": 9,
+        "data": null
+    },
+    {
+        "id": 98,
+        "type": "KEYWORD",
+        "value": "char",
+        "line": 36,
+        "col": 13,
+        "data": null
+    },
+    {
+        "id": 99,
+        "type": "IDENT",
+        "value": "my_var",
+        "line": 36,
+        "col": 18,
+        "data": null
+    },
+    {
+        "id": 100,
+        "type": "=",
+        "value": "=",
+        "line": 36,
+        "col": 25,
+        "data": null
+    },
+    {
+        "id": 101,
+        "type": "STRING",
+        "value": " ",
+        "line": 36,
+        "col": 28,
+        "data": null
+    },
+    {
+        "id": 102,
+        "type": ";",
+        "value": ";",
+        "line": 36,
+        "col": 30,
+        "data": null
+    },
+    {
+        "id": 103,
+        "type": "KEYWORD",
+        "value": "var",
+        "line": 37,
+        "col": 9,
+        "data": null
+    },
+    {
+        "id": 104,
+        "type": "IDENT",
+        "value": "ControlStatusRegister",
+        "line": 37,
+        "col": 13,
+        "data": null
+    },
+    {
+        "id": 105,
+        "type": "IDENT",
+        "value": "cs1",
+        "line": 37,
+        "col": 35,
+        "data": null
+    },
+    {
+        "id": 106,
+        "type": ";",
+        "value": ";",
+        "line": 37,
+        "col": 38,
+        "data": null
+    },
+    {
+        "id": 107,
+        "type": "MNEMONIC",
+        "value": "push",
+        "line": 40,
+        "col": 9,
+        "data": null
+    },
+    {
+        "id": 108,
         "type": "REGISTER",
         "value": "rbx",
-        "line": 35,
+        "line": 40,
         "col": 14,
         "data": {
             "bits": 64,
@@ -748,42 +876,42 @@
         }
     },
     {
-        "id": 93,
+        "id": 109,
         "type": ";",
         "value": ";",
-        "line": 35,
+        "line": 40,
         "col": 17,
         "data": null
     },
     {
-        "id": 94,
+        "id": 110,
         "type": "MNEMONIC",
         "value": "nop",
-        "line": 36,
+        "line": 41,
         "col": 9,
         "data": null
     },
     {
-        "id": 95,
+        "id": 111,
         "type": ";",
         "value": ";",
-        "line": 36,
+        "line": 41,
         "col": 12,
         "data": null
     },
     {
-        "id": 96,
+        "id": 112,
         "type": "MNEMONIC",
         "value": "mov",
-        "line": 37,
+        "line": 42,
         "col": 9,
         "data": null
     },
     {
-        "id": 97,
+        "id": 113,
         "type": "REGISTER",
         "value": "rbx",
-        "line": 37,
+        "line": 42,
         "col": 13,
         "data": {
             "bits": 64,
@@ -792,42 +920,42 @@
         }
     },
     {
-        "id": 98,
+        "id": 114,
         "type": ",",
         "value": ",",
-        "line": 37,
+        "line": 42,
         "col": 16,
         "data": null
     },
     {
-        "id": 99,
+        "id": 115,
         "type": "NUMBER",
         "value": "0x3F",
-        "line": 37,
+        "line": 42,
         "col": 17,
         "data": "0x3F"
     },
     {
-        "id": 100,
+        "id": 116,
         "type": ";",
         "value": ";",
-        "line": 37,
+        "line": 42,
         "col": 21,
         "data": null
     },
     {
-        "id": 101,
+        "id": 117,
         "type": "MNEMONIC",
         "value": "mov",
-        "line": 38,
+        "line": 43,
         "col": 9,
         "data": null
     },
     {
-        "id": 102,
+        "id": 118,
         "type": "REGISTER",
         "value": "eax",
-        "line": 38,
+        "line": 43,
         "col": 13,
         "data": {
             "bits": 32,
@@ -836,42 +964,42 @@
         }
     },
     {
-        "id": 103,
+        "id": 119,
         "type": ",",
         "value": ",",
-        "line": 38,
+        "line": 43,
         "col": 16,
         "data": null
     },
     {
-        "id": 104,
+        "id": 120,
         "type": "IDENT",
         "value": "small_var",
-        "line": 38,
+        "line": 43,
         "col": 18,
         "data": null
     },
     {
-        "id": 105,
+        "id": 121,
         "type": ";",
         "value": ";",
-        "line": 38,
+        "line": 43,
         "col": 27,
         "data": null
     },
     {
-        "id": 106,
+        "id": 122,
         "type": "MNEMONIC",
         "value": "lea",
-        "line": 39,
+        "line": 44,
         "col": 9,
         "data": null
     },
     {
-        "id": 107,
+        "id": 123,
         "type": "REGISTER",
         "value": "rax",
-        "line": 39,
+        "line": 44,
         "col": 13,
         "data": {
             "bits": 64,
@@ -880,98 +1008,226 @@
         }
     },
     {
-        "id": 108,
+        "id": 124,
         "type": ",",
         "value": ",",
-        "line": 39,
+        "line": 44,
         "col": 16,
         "data": null
     },
     {
-        "id": 109,
+        "id": 125,
         "type": "IDENT",
         "value": "hello",
-        "line": 39,
+        "line": 44,
         "col": 18,
         "data": null
     },
     {
-        "id": 110,
+        "id": 126,
         "type": ";",
         "value": ";",
-        "line": 39,
+        "line": 44,
         "col": 23,
         "data": null
     },
     {
-        "id": 111,
+        "id": 127,
         "type": "IDENT",
         "value": "small_var",
-        "line": 40,
+        "line": 45,
         "col": 9,
         "data": null
     },
     {
-        "id": 112,
+        "id": 128,
         "type": "=",
         "value": "=",
-        "line": 40,
+        "line": 45,
         "col": 19,
         "data": null
     },
     {
-        "id": 113,
+        "id": 129,
         "type": "IDENT",
         "value": "cs1",
-        "line": 40,
+        "line": 45,
         "col": 21,
         "data": null
     },
     {
-        "id": 114,
+        "id": 130,
         "type": ".",
         "value": ".",
-        "line": 40,
+        "line": 45,
         "col": 24,
         "data": null
     },
     {
-        "id": 115,
+        "id": 131,
         "type": "IDENT",
         "value": "mode",
-        "line": 40,
+        "line": 45,
         "col": 25,
         "data": null
     },
     {
-        "id": 116,
+        "id": 132,
         "type": ";",
         "value": ";",
-        "line": 40,
+        "line": 45,
         "col": 29,
         "data": null
     },
     {
-        "id": 117,
+        "id": 133,
+        "type": "IDENT",
+        "value": "tmp1",
+        "line": 46,
+        "col": 9,
+        "data": null
+    },
+    {
+        "id": 134,
+        "type": "=",
+        "value": "=",
+        "line": 46,
+        "col": 14,
+        "data": null
+    },
+    {
+        "id": 135,
+        "type": "IDENT",
+        "value": "test",
+        "line": 46,
+        "col": 16,
+        "data": null
+    },
+    {
+        "id": 136,
+        "type": "(",
+        "value": "(",
+        "line": 46,
+        "col": 20,
+        "data": null
+    },
+    {
+        "id": 137,
+        "type": ")",
+        "value": ")",
+        "line": 46,
+        "col": 21,
+        "data": null
+    },
+    {
+        "id": 138,
+        "type": ";",
+        "value": ";",
+        "line": 46,
+        "col": 22,
+        "data": null
+    },
+    {
+        "id": 139,
+        "type": "IDENT",
+        "value": "small_var",
+        "line": 47,
+        "col": 9,
+        "data": null
+    },
+    {
+        "id": 140,
+        "type": "=",
+        "value": "=",
+        "line": 47,
+        "col": 19,
+        "data": null
+    },
+    {
+        "id": 141,
+        "type": "NUMBER",
+        "value": "2",
+        "line": 47,
+        "col": 21,
+        "data": "2"
+    },
+    {
+        "id": 142,
+        "type": "*",
+        "value": "*",
+        "line": 47,
+        "col": 22,
+        "data": null
+    },
+    {
+        "id": 143,
+        "type": "(",
+        "value": "(",
+        "line": 47,
+        "col": 23,
+        "data": null
+    },
+    {
+        "id": 144,
+        "type": "IDENT",
+        "value": "tmp1",
+        "line": 47,
+        "col": 24,
+        "data": null
+    },
+    {
+        "id": 145,
+        "type": "+",
+        "value": "+",
+        "line": 47,
+        "col": 29,
+        "data": null
+    },
+    {
+        "id": 146,
+        "type": "NUMBER",
+        "value": "5",
+        "line": 47,
+        "col": 31,
+        "data": "5"
+    },
+    {
+        "id": 147,
+        "type": ")",
+        "value": ")",
+        "line": 47,
+        "col": 32,
+        "data": null
+    },
+    {
+        "id": 148,
+        "type": ";",
+        "value": ";",
+        "line": 47,
+        "col": 33,
+        "data": null
+    },
+    {
+        "id": 149,
         "type": "}",
         "value": "}",
-        "line": 41,
+        "line": 48,
         "col": 5,
         "data": null
     },
     {
-        "id": 118,
+        "id": 150,
         "type": "}",
         "value": "}",
-        "line": 42,
+        "line": 49,
         "col": 1,
         "data": null
     },
     {
-        "id": 119,
+        "id": 151,
         "type": "EOF",
         "value": "",
-        "line": 42,
+        "line": 49,
         "col": 2,
         "data": null
     }
