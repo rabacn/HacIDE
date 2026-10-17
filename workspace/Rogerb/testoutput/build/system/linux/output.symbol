@@ -1,0 +1,35 @@
+{
+    "status": "filled",
+    "symbol": {
+        "global": {
+            "scope_path": "global",
+            "parent": null,
+            "type": "global",
+            "symbols": []
+        },
+        "global.testoutput.system.linux.output": {
+            "scope_path": "global.testoutput.system.linux.output",
+            "parent": "global",
+            "type": "namespace",
+            "symbols": []
+        },
+        "global.testoutput.system.linux.output.print": {
+            "scope_path": "global.testoutput.system.linux.output.print",
+            "parent": "global.testoutput.system.linux.output",
+            "type": "function",
+            "symbols": {
+                "p_msg": {
+                    "id": 1,
+                    "name": "p_msg",
+                    "scope_path": "global.testoutput.system.linux.output.print",
+                    "base_type": "string",
+                    "capacity": null,
+                    "bits": null,
+                    "is_mutable": true,
+                    "borrow_state": "none",
+                    "borrow_count": 0
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,197 @@
+{
+    "status": "validated",
+    "ast": [
+        {
+            "type": "metadata",
+            "key": "target",
+            "value": "x86_64",
+            "line": 2
+        },
+        {
+            "type": "metadata",
+            "key": "stringbytes",
+            "value": "2",
+            "line": 3
+        },
+        {
+            "type": "use_statement",
+            "path": [
+                "system",
+                "linux",
+                "output"
+            ],
+            "full_namespace": "system.linux.output",
+            "alias": "output",
+            "line": 5
+        },
+        {
+            "type": "namespace",
+            "name": "testoutput",
+            "body": [
+                {
+                    "type": "data_block",
+                    "variables": [
+                        {
+                            "type": "variable",
+                            "label": "msg",
+                            "value": "Hello World\r\n",
+                            "baseTypeInfo": "string",
+                            "capacityTypeInfo": 13,
+                            "align": null,
+                            "is_const": false,
+                            "line": 10,
+                            "symbol_id": 1,
+                            "resolved_bits": 64
+                        },
+                        {
+                            "type": "variable",
+                            "label": "msg1",
+                            "value": "from Roger\r\n",
+                            "baseTypeInfo": "string",
+                            "capacityTypeInfo": 12,
+                            "align": null,
+                            "is_const": false,
+                            "line": 11,
+                            "symbol_id": 2,
+                            "resolved_bits": 64
+                        },
+                        {
+                            "type": "variable",
+                            "label": "tmp",
+                            "value": "1",
+                            "baseTypeInfo": "u32",
+                            "capacityTypeInfo": null,
+                            "align": null,
+                            "is_const": false,
+                            "line": 12,
+                            "symbol_id": 3,
+                            "resolved_bits": 32
+                        },
+                        {
+                            "type": "variable",
+                            "label": "tmp1",
+                            "value": null,
+                            "baseTypeInfo": "u32",
+                            "capacityTypeInfo": null,
+                            "align": null,
+                            "is_const": false,
+                            "line": 13,
+                            "symbol_id": 4,
+                            "resolved_bits": 32
+                        }
+                    ]
+                },
+                {
+                    "type": "function",
+                    "name": "main",
+                    "params": [],
+                    "return_type": "null",
+                    "body": [
+                        {
+                            "type": "while_loop",
+                            "condition": {
+                                "type": "binary_op",
+                                "operator": "<",
+                                "left": {
+                                    "type": "variable_reference",
+                                    "name": "tmp",
+                                    "line": 17
+                                },
+                                "right": "4",
+                                "line": 17
+                            },
+                            "body": [
+                                {
+                                    "type": "assignment",
+                                    "target": {
+                                        "type": "variable_reference",
+                                        "name": "tmp1",
+                                        "line": 18
+                                    },
+                                    "value": {
+                                        "type": "function_call",
+                                        "name": "system.linux.output.print",
+                                        "args": [
+                                            {
+                                                "type": "variable_reference",
+                                                "name": "msg",
+                                                "line": 18
+                                            }
+                                        ],
+                                        "line": 18
+                                    },
+                                    "line": 18
+                                },
+                                {
+                                    "type": "if_statement",
+                                    "condition": {
+                                        "type": "binary_op",
+                                        "operator": "==",
+                                        "left": {
+                                            "type": "variable_reference",
+                                            "name": "tmp",
+                                            "line": 19
+                                        },
+                                        "right": "2",
+                                        "line": 19
+                                    },
+                                    "body": [
+                                        {
+                                            "type": "assignment",
+                                            "target": {
+                                                "type": "variable_reference",
+                                                "name": "tmp1",
+                                                "line": 20
+                                            },
+                                            "value": {
+                                                "type": "function_call",
+                                                "name": "system.linux.output.print",
+                                                "args": [
+                                                    {
+                                                        "type": "variable_reference",
+                                                        "name": "msg1",
+                                                        "line": 20
+                                                    }
+                                                ],
+                                                "line": 20
+                                            },
+                                            "line": 20
+                                        }
+                                    ],
+                                    "elseif_branches": [],
+                                    "else_body": null,
+                                    "line": 19
+                                },
+                                {
+                                    "type": "assignment",
+                                    "target": {
+                                        "type": "variable_reference",
+                                        "name": "tmp",
+                                        "line": 22
+                                    },
+                                    "value": {
+                                        "type": "binary_op",
+                                        "operator": "+",
+                                        "left": {
+                                            "type": "variable_reference",
+                                            "name": "tmp",
+                                            "line": 22
+                                        },
+                                        "right": "1",
+                                        "line": 22
+                                    },
+                                    "line": 22
+                                }
+                            ],
+                            "line": 17
+                        }
+                    ],
+                    "line": 16,
+                    "scope_path": "global.testoutput.main"
+                }
+            ],
+            "line": 7,
+            "scope_path": "global.testoutput"
+        }
+    ]
+}

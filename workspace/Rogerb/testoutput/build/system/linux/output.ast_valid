@@ -1,0 +1,146 @@
+{
+    "status": "validated",
+    "ast": [
+        {
+            "type": "namespace",
+            "name": "testoutput.system.linux.output",
+            "body": [
+                {
+                    "type": "function",
+                    "name": "print",
+                    "params": [
+                        {
+                            "type": "string",
+                            "name": "p_msg"
+                        }
+                    ],
+                    "return_type": "null",
+                    "body": [
+                        {
+                            "type": "asm",
+                            "mnemonic": "mov",
+                            "operands": [
+                                {
+                                    "type": "reg",
+                                    "value": "rax",
+                                    "data": {
+                                        "bits": 64,
+                                        "id": 0,
+                                        "type": "gpr"
+                                    }
+                                },
+                                {
+                                    "type": "imm",
+                                    "value": "1",
+                                    "data": "1",
+                                    "resolved_bits": 64
+                                }
+                            ],
+                            "line": 5,
+                            "schema_info": {
+                                "family": "move_standard",
+                                "type": "move"
+                            }
+                        },
+                        {
+                            "type": "asm",
+                            "mnemonic": "mov",
+                            "operands": [
+                                {
+                                    "type": "reg",
+                                    "value": "rdi",
+                                    "data": {
+                                        "bits": 64,
+                                        "id": 7,
+                                        "type": "gpr"
+                                    }
+                                },
+                                {
+                                    "type": "imm",
+                                    "value": "1",
+                                    "data": "1",
+                                    "resolved_bits": 64
+                                }
+                            ],
+                            "line": 6,
+                            "schema_info": {
+                                "family": "move_standard",
+                                "type": "move"
+                            }
+                        },
+                        {
+                            "type": "asm",
+                            "mnemonic": "lea",
+                            "operands": [
+                                {
+                                    "type": "reg",
+                                    "value": "rsi",
+                                    "data": {
+                                        "bits": 64,
+                                        "id": 6,
+                                        "type": "gpr"
+                                    }
+                                },
+                                {
+                                    "type": "mem",
+                                    "value": "[rel p_msg]",
+                                    "data": null,
+                                    "resolved_bits": 64
+                                }
+                            ],
+                            "line": 7,
+                            "schema_info": {
+                                "family": "address_calc",
+                                "type": "address"
+                            }
+                        },
+                        {
+                            "type": "asm",
+                            "mnemonic": "mov",
+                            "operands": [
+                                {
+                                    "type": "reg",
+                                    "value": "rdx",
+                                    "data": {
+                                        "bits": 64,
+                                        "id": 2,
+                                        "type": "gpr"
+                                    }
+                                },
+                                {
+                                    "type": "imm",
+                                    "value": "13",
+                                    "data": "13",
+                                    "resolved_bits": 64
+                                }
+                            ],
+                            "line": 8,
+                            "schema_info": {
+                                "family": "move_standard",
+                                "type": "move"
+                            }
+                        },
+                        {
+                            "type": "asm",
+                            "mnemonic": "syscall",
+                            "operands": [],
+                            "line": 9,
+                            "schema_info": {
+                                "family": "system",
+                                "type": "clobber",
+                                "clobbers": [
+                                    "rcx",
+                                    "r11"
+                                ]
+                            }
+                        }
+                    ],
+                    "line": 4,
+                    "scope_path": "global.testoutput.system.linux.output.print"
+                }
+            ],
+            "line": 2,
+            "scope_path": "global.testoutput.system.linux.output"
+        }
+    ]
+}

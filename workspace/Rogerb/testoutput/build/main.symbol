@@ -1,0 +1,68 @@
+{
+    "status": "filled",
+    "symbol": {
+        "global": {
+            "scope_path": "global",
+            "parent": null,
+            "type": "global",
+            "symbols": []
+        },
+        "global.testoutput": {
+            "scope_path": "global.testoutput",
+            "parent": "global",
+            "type": "namespace",
+            "symbols": {
+                "msg": {
+                    "id": 1,
+                    "name": "msg",
+                    "scope_path": "global.testoutput",
+                    "base_type": "string",
+                    "capacity": 13,
+                    "bits": 64,
+                    "is_mutable": true,
+                    "borrow_state": "none",
+                    "borrow_count": 0
+                },
+                "msg1": {
+                    "id": 2,
+                    "name": "msg1",
+                    "scope_path": "global.testoutput",
+                    "base_type": "string",
+                    "capacity": 12,
+                    "bits": 64,
+                    "is_mutable": true,
+                    "borrow_state": "none",
+                    "borrow_count": 0
+                },
+                "tmp": {
+                    "id": 3,
+                    "name": "tmp",
+                    "scope_path": "global.testoutput",
+                    "base_type": "u32",
+                    "capacity": null,
+                    "bits": 32,
+                    "is_mutable": true,
+                    "borrow_state": "none",
+                    "borrow_count": 0
+                },
+                "tmp1": {
+                    "id": 4,
+                    "name": "tmp1",
+                    "scope_path": "global.testoutput",
+                    "base_type": "u32",
+                    "capacity": null,
+                    "bits": 32,
+                    "is_mutable": true,
+                    "borrow_state": "none",
+                    "borrow_count": 0
+                }
+            }
+        },
+        "global.testoutput.main": {
+            "scope_path": "global.testoutput.main",
+            "parent": "global.testoutput",
+            "type": "function",
+            "symbols": []
+        }
+    }
+}
