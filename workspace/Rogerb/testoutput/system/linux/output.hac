@@ -1,0 +1,12 @@
+// File: system/linux/output.hac
+namespace testoutput.system.linux.output {
+
+   function print(string p_msg, string_size msgSize) : null {
+      mov rax, 1;
+      mov rdi, 1;
+      lea rsi, [rel p_msg];
+      mov rdx, msgSize;
+      syscall;
+    }
+
+}

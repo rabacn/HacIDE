@@ -1,0 +1,25 @@
+target: x86_64;
+
+namespace tmp3{ 
+    data { 
+        u32 small_var;
+        string [15] hello = "Hello World";
+        const u32 EOF = 32;
+        struct test {
+          u32 first;
+          u16 second : 16;
+          pad_bits : 16;
+        }
+        test cs1;
+    }
+            
+    function main() : null {
+        push rbx;
+        nop;
+        mov rbx,0x3F;
+//        mov eax, small_var;
+        lea rax, hello;
+        cs1.first = EOF;
+        cs1.second = 2*(cs1.first+3);
+    }
+}

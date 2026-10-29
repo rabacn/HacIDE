@@ -35,13 +35,13 @@ main: ; line 35
     mov   rbx, 0x3F ; line 42
     mov   eax, dword [rel small_var] ; line 43
     lea   rax, [rel hello] ; line 44
-    mov   r10, word [rel cs1 + 4] ; line 45
+    movzx r10, word [rel cs1 + 4] ; line 45
     shr   r10, 4 ; line 45
     and   r10, 15 ; line 45
     mov   dword [rel small_var], r10d ; line 45
     call  test ; line 46
     mov   word [rel tmp1], ax ; line 46
-    mov   r10, word [rel tmp1] ; line 47
+    movzx r10, word [rel tmp1] ; line 47
     add   r10, 5
     mov   r11, 2 ; line 47
     imul  r11, r10

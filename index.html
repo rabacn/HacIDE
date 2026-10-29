@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>HAC Web IDE</title>
-    <!-- Bootstrap 4 / Dark Theme Styling -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
@@ -22,230 +21,126 @@
             background-color: var(--bg-dark);
             color: var(--text-main);
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
+            margin: 0; padding: 0; min-height: 100vh;
         }
 
-        /* Top Navbar */
-        .navbar {
+        /* --- AUTH OVERLAY --- */
+        #auth-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: #121212; z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .auth-box {
             background-color: var(--panel-bg);
-            border-bottom: 1px solid var(--border-color);
-            z-index: 1030;
+            padding: 30px; border-radius: 8px; width: 100%; max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid var(--border-color);
         }
+        .auth-box .nav-pills .nav-link { color: #999; border-radius: 4px; }
+        .auth-box .nav-pills .nav-link.active { background-color: var(--accent-blue); color: #fff; }
 
-        /* Desktop Layout Flex Box */
-        .app-container {
-            display: flex;
-            flex-direction: row;
-            height: calc(100vh - 56px);
-            overflow: hidden;
+        .navbar { background-color: var(--panel-bg); border-bottom: 1px solid var(--border-color); z-index: 1030; }
+        .app-container { display: flex; flex-direction: row; height: calc(100vh - 56px); overflow: hidden; }
+        
+        .sidebar { background-color: var(--panel-bg); border-right: 1px solid var(--border-color); width: 260px; flex-shrink: 0; padding: 12px; overflow-y: auto; }
+        
+        /* File Tree Styling */
+        #file-list { margin-left: -8px; }
+        .tree-folder, .tree-file { 
+            cursor: pointer; padding: 4px 8px; color: #d4d4d4; display: flex; align-items: center; justify-content: space-between; font-size: 13px; user-select: none; border-radius: 3px; 
         }
+        .tree-folder:hover, .tree-file:hover { background-color: #37373d; color: #ffffff; }
+        .tree-file.active { background-color: #37373d; color: #ffffff; }
+        .tree-children { display: none; }
+        .tree-children.open { display: block; }
+        .tree-icon { width: 22px; text-align: center; margin-right: 4px; display: inline-block; }
+        .folder-toggle { width: 12px; text-align: center; font-size: 10px; color: #888; }
+        
+        .tree-label-group { display: flex; align-items: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+        .tree-item-actions { display: none; margin-left: auto; flex-shrink: 0; }
+        .tree-folder:hover .tree-item-actions, .tree-file:hover .tree-item-actions { display: flex; align-items: center; }
+        .tree-item-actions button { background: none; border: none; color: #999; padding: 0 4px; font-size: 12px; outline: none; }
+        .tree-item-actions button:hover { color: #ffffff; }
 
-        /* Sidebar */
-        .sidebar {
-            background-color: var(--panel-bg);
-            border-right: 1px solid var(--border-color);
-            width: 260px;
-            flex-shrink: 0;
-            padding: 12px;
-            overflow-y: auto;
-            transition: all 0.2s ease-in-out;
-        }
+        .main-content { flex: 1; display: flex; flex-direction: column; min-width: 0; height: 100%; background-color: var(--bg-dark); }
+        .editor-container { flex: 1; display: flex; flex-direction: column; min-height: 0; height: 100%; }
+        .editor-wrapper { flex: 1; display: flex; min-height: 0; position: relative; }
 
-        /* Center Main Content (Editor + Console) */
-        .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            min-width: 0;
-            height: 100%;
-            background-color: var(--bg-dark);
-        }
+        .line-numbers { width: 45px; padding: 12px 0; background-color: var(--bg-dark); color: #6e7681; border-right: 1px solid var(--border-color); font-family: 'Consolas', monospace; font-size: 14px; line-height: 1.5; text-align: right; user-select: none; overflow: hidden; }
+        .line-num { padding: 0 10px 0 5px; border-right: 2px solid transparent; }
+        .line-num.error-line { background-color: var(--error-bg); color: var(--error-text); border-right: 2px solid #f43f5e; font-weight: bold; }
 
-        /* EDITOR FLEXBOX LAYOUT */
-        .editor-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            min-height: 0;
-            height: 100%;
-        }
+        textarea.code-editor { flex: 1; width: 100%; background-color: var(--bg-dark); color: #dcdcaa; border: none; padding: 12px; font-family: 'Consolas', monospace; font-size: 14px; line-height: 1.5; resize: none; outline: none; tab-size: 4; white-space: pre; overflow-wrap: normal; overflow-x: auto; }
 
-        .editor-wrapper {
-            flex: 1;
-            display: flex;
-            min-height: 0;
-            position: relative;
-            background-color: var(--bg-dark);
-        }
+        .pipeline-panel { background-color: var(--panel-bg); border-left: 1px solid var(--border-color); width: 470px; display: flex; flex-direction: column; }
+        .pipeline-wrapper { flex: 1; display: flex; min-height: 0; position: relative; }
+        
+        .pipeline-line-numbers { width: 45px; padding: 10px 0; background-color: var(--bg-dark); color: #6e7681; border-right: 1px solid var(--border-color); font-family: 'Consolas', monospace; font-size: 12px; line-height: 1.5; text-align: right; user-select: none; overflow: hidden; display: none; }
+        .pipeline-line-num { padding: 0 8px 0 4px; }
 
-        /* Line Numbers Column */
-        .line-numbers {
-            width: 45px;
-            min-width: 45px;
-            padding: 12px 0;
-            background-color: var(--bg-dark);
-            color: #6e7681;
-            border-right: 1px solid var(--border-color);
-            font-family: 'Consolas', 'Fira Code', 'Courier New', monospace;
-            font-size: 14px;
-            line-height: 1.5;
-            text-align: right;
-            user-select: none;
-            overflow: hidden;
-        }
+        .console-panel { height: 200px; background-color: var(--bg-dark); border-top: 1px solid var(--border-color); display: flex; flex-direction: column; }
+        pre.output-box { background-color: var(--bg-dark); color: #9cdcfe; padding: 10px; font-family: 'Consolas', monospace; font-size: 12px; line-height: 1.5; flex: 1; margin: 0; overflow: auto; white-space: pre-wrap; word-break: break-all; }
+        pre.output-box.error-text { color: #ff7b72; }
 
-        .line-num {
-            padding: 0 10px 0 5px;
-            box-sizing: border-box;
-            border-right: 2px solid transparent;
-        }
+        .panel-header { display: flex; background-color: #2d2d2d; border-bottom: 1px solid var(--border-color); }
+        .nav-tabs-dark { border-bottom: none; flex-grow: 1; flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; }
+        .nav-tabs-dark .nav-link { color: #999; border: none; border-radius: 0; padding: 8px 10px; font-size: 12px; white-space: nowrap; }
+        .nav-tabs-dark .nav-link.active { background-color: var(--bg-dark); color: #fff; border-top: 2px solid var(--accent-blue); }
+        
+        .copy-action { display: flex; align-items: center; padding: 0 12px; border-left: 1px solid var(--border-color); background-color: #2d2d2d; }
+        .icon-btn { background: none; border: none; color: #999; cursor: pointer; padding: 4px; outline: none; }
+        .icon-btn:hover { color: #ffffff; }
 
-        /* Error Line Highlight */
-        .line-num.error-line {
-            background-color: var(--error-bg);
-            color: var(--error-text);
-            border-right: 2px solid #f43f5e;
-            font-weight: bold;
-        }
-
-        textarea.code-editor {
-            flex: 1;
-            width: 100%;
-            min-height: 0;
-            background-color: var(--bg-dark);
-            color: #dcdcaa;
-            border: none;
-            padding: 12px;
-            font-family: 'Consolas', 'Fira Code', 'Courier New', monospace;
-            font-size: 14px;
-            line-height: 1.5;
-            resize: none;
-            outline: none;
-            tab-size: 4;
-            box-sizing: border-box;
-            white-space: pre;
-            overflow-wrap: normal;
-            overflow-x: auto;
-        }
-
-        /* Pipeline Right Panel */
-        .pipeline-panel {
-            background-color: var(--panel-bg);
-            border-left: 1px solid var(--border-color);
-            width: 380px;
-            flex-shrink: 0;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Bottom Console */
-        .console-panel {
-            height: 200px;
-            background-color: var(--bg-dark);
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            flex-shrink: 0;
-        }
-
-        pre.output-box {
-            background-color: var(--bg-dark);
-            color: #9cdcfe;
-            padding: 10px;
-            font-family: 'Consolas', 'Courier New', monospace;
-            font-size: 12px;
-            flex: 1;
-            margin: 0;
-            overflow: auto;
-            white-space: pre-wrap;
-            word-break: break-all;
-        }
-
-        /* Error Output text color */
-        pre.output-box.error-text {
-            color: #ff7b72;
-        }
-
-        .file-item {
-            cursor: pointer;
-            padding: 6px 8px;
-            border-radius: 4px;
-            color: #cccccc;
-            display: flex;
-            align-items: center;
-            font-size: 13px;
-            word-break: break-all;
-        }
-
-        .file-item:hover, .file-item.active {
-            background-color: #37373d;
-            color: #ffffff;
-        }
-
-        .nav-tabs-dark {
-            background-color: #2d2d2d;
-            border-bottom: 1px solid var(--border-color);
-            flex-wrap: nowrap;
-            overflow-x: auto;
-        }
-
-        .nav-tabs-dark .nav-link {
-            color: #999;
-            border: none;
-            border-radius: 0;
-            padding: 8px 10px;
-            font-size: 12px;
-            white-space: nowrap;
-        }
-
-        .nav-tabs-dark .nav-link.active {
-            background-color: var(--bg-dark);
-            color: #fff;
-            border-top: 2px solid var(--accent-blue);
-        }
-
-        /* Mobile & Portrait Overrides */
         @media (max-width: 768px) {
-            .app-container {
-                flex-direction: column;
-                height: auto;
-                overflow-y: auto;
-            }
-            .sidebar {
-                width: 100%;
-                height: auto;
-                max-height: 250px;
-                border-right: none;
-                border-bottom: 1px solid var(--border-color);
-                display: none;
-            }
+            .app-container { flex-direction: column; height: auto; overflow-y: auto; }
+            .sidebar { width: 100%; height: auto; max-height: 250px; border-right: none; border-bottom: 1px solid var(--border-color); display: none; }
             .sidebar.show-mobile { display: block; }
-            .main-content { height: auto; }
             .editor-container { height: 50vh; min-height: 350px; }
             .pipeline-panel { width: 100%; height: 300px; border-left: none; border-top: 1px solid var(--border-color); }
             .console-panel { height: 220px; }
         }
+        /* --- Interactive Program Console Styles --- */
+        .console-input-row { display: flex; background-color: #2d2d2d; border-top: 1px solid var(--border-color); padding: 4px 8px; align-items: center; }
+        .console-input-row input { flex: 1; background-color: var(--bg-dark); color: #9cdcfe; border: 1px solid var(--border-color); border-radius: 3px; padding: 4px 8px; font-family: 'Consolas', monospace; font-size: 12px; outline: none; }
+        .console-input-row input:focus { border-color: var(--accent-blue); }
+        .console-input-row button { background-color: var(--accent-blue); color: #fff; border: none; border-radius: 3px; padding: 4px 12px; font-size: 12px; margin-left: 6px; cursor: pointer; }
+        .console-input-row button:hover { opacity: 0.9; }
+        
     </style>
 </head>
 <body>
 
+    <!-- AUTHENTICATION OVERLAY -->
+    <div id="auth-overlay">
+        <div class="auth-box">
+            <h3 class="text-center mb-4 text-light"><i class="fas fa-code text-primary mr-2"></i>HAC IDE</h3>
+            <ul class="nav nav-pills nav-justified mb-3">
+                <li class="nav-item"><a class="nav-link active" id="tab-login" href="#" onclick="switchAuthTab('login')">Login</a></li>
+                <li class="nav-item"><a class="nav-link" id="tab-register" href="#" onclick="switchAuthTab('register')">Register</a></li>
+            </ul>
+            <div class="form-group">
+                <input type="text" id="auth-username" class="form-control bg-dark text-light border-secondary" placeholder="Username" autocomplete="off">
+            </div>
+            <div class="form-group">
+                <input type="password" id="auth-password" class="form-control bg-dark text-light border-secondary" placeholder="Password">
+            </div>
+            <div id="auth-error" class="text-danger small mb-3 text-center" style="display:none;"></div>
+            <button id="auth-btn" class="btn btn-primary btn-block" onclick="submitAuth()">Login</button>
+        </div>
+    </div>
+
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand navbar-dark px-2 px-md-3">
-        <button class="btn btn-outline-secondary btn-sm mr-2 d-md-none" onclick="toggleSidebar()" title="Toggle Files">
-            <i class="fas fa-folder"></i>
-        </button>
-
+        <button class="btn btn-outline-secondary btn-sm mr-2 d-md-none" onclick="toggleSidebar()"><i class="fas fa-folder"></i></button>
         <a class="navbar-brand font-weight-bold mr-auto" href="#"><i class="fas fa-code text-primary mr-2"></i>HAC IDE</a>
         
         <div class="d-flex align-items-center">
+            <span class="text-muted small mr-3 d-none d-md-inline">User: <strong id="nav-username" class="text-light"></strong></span>
             <span id="status-indicator" class="badge badge-secondary mr-2">Ready</span>
-            <a href="test.html" class="btn btn-sm btn-outline-warning mr-2" title="API Test Harness">
-                <i class="fas fa-vial mr-1"></i><span class="d-none d-sm-inline">API Test</span>
-            </a>
+            <button class="btn btn-sm btn-outline-info mr-2" onclick="showRawApiResponse()" title="View Last Raw API Response"><i class="fas fa-terminal mr-1"></i><span class="d-none d-sm-inline">Raw API</span></button>
             <button class="btn btn-sm btn-success mr-2" onclick="saveFile()"><i class="fas fa-save mr-1"></i><span class="d-none d-sm-inline">Save</span></button>
-            <button class="btn btn-sm btn-primary" onclick="compileAndRun()"><i class="fas fa-play mr-1"></i><span class="d-none d-sm-inline">Run</span></button>
+            <button class="btn btn-sm btn-primary mr-2" onclick="compileAndRun()"><i class="fas fa-play mr-1"></i><span class="d-none d-sm-inline">Run</span></button>
+            <button class="btn btn-sm btn-outline-danger" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
         </div>
     </nav>
 
@@ -255,7 +150,7 @@
         <!-- SIDEBAR -->
         <div id="sidebar" class="sidebar">
             <div class="form-group mb-2">
-                <label class="small text-muted font-weight-bold mb-1">WORKSPACE PROJECT</label>
+                <label class="small text-muted font-weight-bold mb-1">PROJECT WORKSPACE</label>
                 <select id="project-select" class="form-control form-control-sm bg-dark text-light border-secondary" onchange="switchProject(this.value)"></select>
             </div>
 
@@ -270,7 +165,10 @@
 
             <div class="d-flex justify-content-between align-items-center mb-2">
                 <span class="small text-muted font-weight-bold">FILES</span>
-                <button class="btn btn-link btn-sm text-light p-0" onclick="createFile()" title="Create file"><i class="fas fa-file-medical"></i></button>
+                <div>
+                    <button class="btn btn-link btn-sm text-light p-0 mr-2" onclick="createFolder()" title="Create folder"><i class="fas fa-folder-plus"></i></button>
+                    <button class="btn btn-link btn-sm text-light p-0" onclick="createFile()" title="Create file"><i class="fas fa-file-medical"></i></button>
+                </div>
             </div>
 
             <div id="file-list"></div>
@@ -281,59 +179,194 @@
             <div class="editor-container">
                 <div class="bg-dark px-3 py-1 border-bottom border-secondary d-flex justify-content-between align-items-center">
                     <span id="active-file-title" class="small text-muted">main.hac</span>
+                    <button class="icon-btn" onclick="copyContent('code-editor', this)" title="Copy Code"><i class="far fa-copy"></i></button>
                 </div>
                 <div class="editor-wrapper">
                     <div id="line-numbers" class="line-numbers"></div>
-                    <textarea id="code-editor" class="code-editor" wrap="off" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="// Write HAC code here..."></textarea>
+                    <textarea id="code-editor" class="code-editor" wrap="off" spellcheck="false" placeholder="// Write HAC code here..."></textarea>
                 </div>
             </div>
 
             <div class="console-panel">
-                <ul class="nav nav-tabs nav-tabs-dark">
-                    <li class="nav-item">
-                        <a class="nav-link active" id="tab-cli" href="#" onclick="switchConsoleTab('cli'); return false;">CLI Logs</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="tab-errors" href="#" onclick="switchConsoleTab('errors'); return false;">Errors / Output</a>
-                    </li>
-                </ul>
+                <div class="panel-header">
+                    <ul class="nav nav-tabs nav-tabs-dark">
+                        <li class="nav-item"><a class="nav-link active" id="tab-cli" href="#" onclick="switchConsoleTab('cli'); return false;">CLI Logs</a></li>
+                        <li class="nav-item"><a class="nav-link" id="tab-errors" href="#" onclick="switchConsoleTab('errors'); return false;">Errors / Output</a></li>
+                        <li class="nav-item"><a class="nav-link text-warning" id="tab-program" href="#" onclick="switchConsoleTab('program'); return false;"><i class="fas fa-terminal mr-1"></i>Program Console</a></li>
+                    </ul>
+                    <div class="copy-action"><button class="icon-btn" onclick="copyContent('console-output', this)"><i class="far fa-copy"></i></button></div>
+                </div>
                 <pre id="console-output" class="output-box">// Console ready...</pre>
+                
+                <!-- Interactive Stdin Input Bar for Program Execution -->
+                <div id="program-input-container" class="console-input-row" style="display: none;">
+                    <span class="text-muted mr-2 font-weight-bold" style="font-size: 12px;">&gt;</span>
+                    <input type="text" id="program-stdin-input" placeholder="Type input for program and press Enter..." autocomplete="off" onkeydown="if(event.key==='Enter') sendProgramInput()">
+                    <button onclick="sendProgramInput()"><i class="fas fa-paper-plane mr-1"></i>Send</button>
+                </div>
             </div>
         </div>
 
         <!-- RIGHT PANEL -->
         <div class="pipeline-panel">
-            <ul class="nav nav-tabs nav-tabs-dark">
-                <li class="nav-item"><a class="nav-link active" id="tab-lexer" href="#" onclick="switchPipelineTab('lexer'); return false;">Lexer</a></li>
-                <li class="nav-item"><a class="nav-link" id="tab-parser" href="#" onclick="switchPipelineTab('parser'); return false;">AST</a></li>
-                <li class="nav-item"><a class="nav-link" id="tab-ast_valid" href="#" onclick="switchPipelineTab('ast_valid'); return false;">Valid AST</a></li>
-                <li class="nav-item"><a class="nav-link" id="tab-symbol" href="#" onclick="switchPipelineTab('symbol'); return false;">Symbols</a></li>
-                <li class="nav-item"><a class="nav-link" id="tab-lowering_1" href="#" onclick="switchPipelineTab('lowering_1'); return false;">IR 1</a></li>
-                <li class="nav-item"><a class="nav-link" id="tab-lowering_2" href="#" onclick="switchPipelineTab('lowering_2'); return false;">IR 2</a></li>
-                <li class="nav-item"><a class="nav-link" id="tab-nasm" href="#" onclick="switchPipelineTab('nasm'); return false;">NASM (.asm)</a></li>
-            </ul>
-            <pre id="pipeline-output" class="output-box">// Pipeline output will display here upon compilation...</pre>
+            <div class="panel-header">
+                <ul class="nav nav-tabs nav-tabs-dark">
+                    <li class="nav-item"><a class="nav-link active" id="tab-lexer" href="#" onclick="switchPipelineTab('lexer'); return false;">Lexer</a></li>
+                    <li class="nav-item"><a class="nav-link" id="tab-parser" href="#" onclick="switchPipelineTab('parser'); return false;">AST</a></li>
+                    <li class="nav-item"><a class="nav-link" id="tab-ast_valid" href="#" onclick="switchPipelineTab('ast_valid'); return false;">Valid AST</a></li>
+                    <li class="nav-item"><a class="nav-link" id="tab-symbol" href="#" onclick="switchPipelineTab('symbol'); return false;">Symbols</a></li>
+                    <li class="nav-item"><a class="nav-link" id="tab-lowering_1" href="#" onclick="switchPipelineTab('lowering_1'); return false;">IR 1</a></li>
+                    <li class="nav-item"><a class="nav-link" id="tab-lowering_2" href="#" onclick="switchPipelineTab('lowering_2'); return false;">IR 2</a></li>
+                    <li class="nav-item"><a class="nav-link" id="tab-nasm" href="#" onclick="switchPipelineTab('nasm'); return false;">NASM (.asm)</a></li>
+                </ul>
+                <div class="copy-action"><button class="icon-btn" onclick="copyContent('pipeline-output', this)"><i class="far fa-copy"></i></button></div>
+            </div>
+            <div class="pipeline-wrapper">
+                <div id="pipeline-line-numbers" class="pipeline-line-numbers"></div>
+                <pre id="pipeline-output" class="output-box">// Pipeline output...</pre>
+            </div>
         </div>
 
     </div>
 
+    <!-- RAW API RESPONSE MODAL -->
+    <div class="modal fade" id="rawApiModal" tabindex="-1" role="dialog" aria-labelledby="rawApiModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content bg-dark text-light border-secondary">
+                <div class="modal-header border-secondary">
+                    <h5 class="modal-title" id="rawApiModalLabel"><i class="fas fa-terminal mr-2 text-info"></i>Last Raw API Response</h5>
+                    <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex justify-content-end mb-2">
+                        <button class="btn btn-sm btn-outline-secondary" onclick="copyContent('raw-api-output', this)">
+                            <i class="far fa-copy mr-1"></i>Copy Raw Text
+                        </button>
+                    </div>
+                    <pre id="raw-api-output" class="output-box" style="max-height: 450px; background-color: #141414;"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap/jQuery JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
+        // --- STATE & API TRACKER ---
         let currentProject = 'default';
         let currentFile = 'main.hac';
         let activePipelineStage = 'lexer';
         let activeConsoleTab = 'cli';
-        
-        let errorLines = new Set(); // Stores line numbers that have errors
+        let errorLines = new Set(); 
+        let authMode = 'login'; 
 
-        let currentRunArtifacts = {
-            cli_logs: '', errors: '', lexer: null, parser: null,
-            ast_valid: null, symbol: null, lowering_1: null, lowering_2: null, nasm: null
-        };
+        let lastRawApiResponse = "// No API calls made yet.";
+  //      let currentRunArtifacts = { cli_logs: '', errors: '', lexer: null, parser: null, ast_valid: null, symbol: null, lowering_1: null, lowering_2: null, nasm: null };
 
         const codeEditor = document.getElementById('code-editor');
         const lineNumbers = document.getElementById('line-numbers');
+        const pipelineOutput = document.getElementById('pipeline-output');
+        const pipelineLineNumbers = document.getElementById('pipeline-line-numbers');
 
-        // --- LINE NUMBERS & HIGHLIGHTING LOGIC ---
+        // --- ADD TO EXISTING STATE ---
+  //      let activeConsoleTab = 'cli'; // Can be 'cli', 'errors', or 'program'
+        let currentRunArtifacts = { 
+            cli_logs: '', 
+            errors: '', 
+            program_output: '// Click "Run" or execute program to view output...',
+            lexer: null, parser: null, ast_valid: null, symbol: null, lowering_1: null, lowering_2: null, nasm: null 
+        };
+        // --- CENTRALIZED API WRAPPER ---
+        async function apiFetch(url, options = {}) {
+            try {
+                const res = await fetch(url, options);
+                const clone = res.clone();
+                lastRawApiResponse = await clone.text();
+                return res;
+            } catch (err) {
+                lastRawApiResponse = "Network Fetch Error: " + err.message;
+                throw err;
+            }
+        }
+
+        function showRawApiResponse() {
+            const outBox = document.getElementById('raw-api-output');
+            outBox.textContent = lastRawApiResponse;
+            $('#rawApiModal').modal('show');
+        }
+
+        // --- INIT & AUTH ---
+        document.addEventListener('DOMContentLoaded', async () => {
+            await checkAuth();
+            updateLineNumbers();
+        });
+
+        async function checkAuth() {
+            try {
+                const res = await apiFetch('api.php?action=check_auth');
+                const data = await res.json();
+                if (data.status === 'success') {
+                    document.getElementById('auth-overlay').style.display = 'none';
+                    document.getElementById('nav-username').textContent = data.username;
+                    await initializeIDE();
+                } else {
+                    document.getElementById('auth-overlay').style.display = 'flex';
+                }
+            } catch (e) { console.error("Auth check failed:", e); }
+        }
+
+        function switchAuthTab(mode) {
+            authMode = mode;
+            document.getElementById('tab-login').classList.toggle('active', mode === 'login');
+            document.getElementById('tab-register').classList.toggle('active', mode === 'register');
+            document.getElementById('auth-btn').textContent = mode === 'login' ? 'Login' : 'Create Account';
+            document.getElementById('auth-error').style.display = 'none';
+        }
+
+        async function submitAuth() {
+            const user = document.getElementById('auth-username').value.trim();
+            const pass = document.getElementById('auth-password').value;
+            const errDiv = document.getElementById('auth-error');
+            
+            if (!user || !pass) {
+                errDiv.textContent = "Please enter both fields."; errDiv.style.display = 'block'; return;
+            }
+
+            try {
+                const res = await apiFetch(`api.php?action=${authMode}`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: user, password: pass })
+                });
+                const data = await res.json();
+                
+                if (data.status === 'success') {
+                    document.getElementById('auth-overlay').style.display = 'none';
+                    document.getElementById('nav-username').textContent = data.username;
+                    await initializeIDE();
+                } else {
+                    errDiv.textContent = data.message; errDiv.style.display = 'block';
+                }
+            } catch (e) {
+                errDiv.textContent = "Connection error."; errDiv.style.display = 'block';
+            }
+        }
+
+        async function logout() {
+            await apiFetch('api.php?action=logout');
+            location.reload();
+        }
+
+        async function initializeIDE() {
+            await loadProjectList();
+            await loadFileList();
+            if (currentFile) await openFile(currentFile);
+        }
+
+        // --- EDITOR LOGIC ---
         function updateLineNumbers() {
             const lines = codeEditor.value.split('\n').length;
             let html = '';
@@ -345,19 +378,17 @@
         }
 
         codeEditor.addEventListener('scroll', () => { lineNumbers.scrollTop = codeEditor.scrollTop; });
+        pipelineOutput.addEventListener('scroll', () => { pipelineLineNumbers.scrollTop = pipelineOutput.scrollTop; });
 
         codeEditor.addEventListener('input', () => {
-            if (errorLines.size > 0) {
-                errorLines.clear();
-            }
+            if (errorLines.size > 0) errorLines.clear();
             updateLineNumbers();
         });
 
         codeEditor.addEventListener('keydown', function(e) {
             if (e.key === 'Tab') {
                 e.preventDefault();
-                const start = this.selectionStart;
-                const end = this.selectionEnd;
+                const start = this.selectionStart, end = this.selectionEnd;
                 this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
                 this.selectionStart = this.selectionEnd = start + 4;
                 updateLineNumbers();
@@ -367,69 +398,41 @@
         function parseErrorsForLines(errorText) {
             errorLines.clear();
             if (!errorText) return;
-            
             const regex = /\[?Line\s*:?\s*(\d+)\]?/gi;
             let match;
-            while ((match = regex.exec(errorText)) !== null) {
-                errorLines.add(parseInt(match[1], 10));
-            }
+            while ((match = regex.exec(errorText)) !== null) errorLines.add(parseInt(match[1], 10));
             updateLineNumbers();
         }
 
-        // --- UTILS ---
-        function getTimestamp() {
-            const now = new Date();
-            return `[${now.toTimeString().split(' ')[0]}] `;
-        }
-        function formatLogWithTimestamps(rawText) {
-            if (!rawText) return '';
-            const ts = getTimestamp();
-            return rawText.split('\n').map(line => line.trim() ? `${ts}${line}` : line).join('\n');
-        }
-        function logSystem(msg) { console.log(`${getTimestamp()}[HAC IDE] ${msg}`); }
-
-        // --- INIT ---
-        document.addEventListener('DOMContentLoaded', async () => {
-            updateLineNumbers();
-            await loadProjectList();
-            await loadFileList();
-            if (currentFile) await openFile(currentFile);
-        });
-
+        // --- FILE & PROJECT MANAGEMENT ---
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('show-mobile'); }
 
-        // --- PROJECT / FILE MANAGEMENT ---
         async function loadProjectList() {
-            try {
-                const res = await fetch('api.php?action=list_projects');
-                const data = await res.json();
-                if (data.status === 'success') {
-                    const select = document.getElementById('project-select');
-                    select.innerHTML = '';
-                    data.projects.forEach(proj => {
-                        const option = document.createElement('option');
-                        option.value = proj; option.textContent = proj;
-                        if (proj === currentProject) option.selected = true;
-                        select.appendChild(option);
-                    });
-                }
-            } catch (e) { logSystem("Failed to load projects: " + e.message); }
+            const res = await apiFetch('api.php?action=list_projects');
+            const data = await res.json();
+            if (data.status === 'success') {
+                const select = document.getElementById('project-select');
+                select.innerHTML = '';
+                data.projects.forEach(proj => {
+                    const option = document.createElement('option');
+                    option.value = proj; option.textContent = proj;
+                    if (proj === currentProject) option.selected = true;
+                    select.appendChild(option);
+                });
+            }
         }
 
         async function createProject() {
             const input = document.getElementById('new-project-name');
             const projectName = input.value.trim();
             if (!projectName) return;
-            try {
-                const res = await fetch(`api.php?action=create_project&project=${encodeURIComponent(projectName)}`);
-                const data = await res.json();
-                if (data.status === 'success') {
-                    input.value = ''; currentProject = data.project || projectName;
-                    await loadProjectList();
-                    document.getElementById('project-select').value = currentProject;
-                    await loadFileList(); await openFile('main.hac');
-                } else alert(data.message || "Failed to create project");
-            } catch (e) { logSystem("Error: " + e.message); }
+            const res = await apiFetch(`api.php?action=create_project&project=${encodeURIComponent(projectName)}`);
+            const data = await res.json();
+            if (data.status === 'success') {
+                input.value = ''; currentProject = data.project;
+                await loadProjectList(); document.getElementById('project-select').value = currentProject;
+                await loadFileList(); await openFile('main.hac');
+            } else alert(data.message);
         }
 
         async function switchProject(projectName) {
@@ -438,179 +441,325 @@
             await loadFileList();
         }
 
-        async function loadFileList() {
-            try {
-                const res = await fetch(`api.php?action=list_files&project=${encodeURIComponent(currentProject)}`);
-                const data = await res.json();
-                const listContainer = document.getElementById('file-list');
-                listContainer.innerHTML = '';
+        // --- TREE RENDERING (Files First, then Folders, with Rename/Delete) ---
+        function renderTree(nodes, container, level) {
+            const paddingLeft = (level * 12) + 8;
+            nodes.forEach(node => {
+                if (node.type === 'folder') {
+                    const folderDiv = document.createElement('div');
+                    const folderLabel = document.createElement('div');
+                    folderLabel.className = 'tree-folder'; 
+                    folderLabel.style.paddingLeft = `${paddingLeft}px`;
+                    
+                    const labelGroup = document.createElement('div');
+                    labelGroup.className = 'tree-label-group';
+                    labelGroup.innerHTML = `<span class="tree-icon"><i class="fas fa-chevron-down folder-toggle"></i><i class="fas fa-folder text-warning ml-1"></i></span> <span class="text-truncate">${node.name}</span>`;
+                    
+                    const actionsDiv = document.createElement('div');
+                    actionsDiv.className = 'tree-item-actions';
+                    actionsDiv.innerHTML = `
+                        <button onclick="renameItem(event, '${node.path}', true)" title="Rename folder"><i class="fas fa-edit"></i></button>
+                        <button onclick="deleteItem(event, '${node.path}', true)" title="Delete folder"><i class="fas fa-trash-alt text-danger"></i></button>
+                    `;
 
-                if (data.status === 'success' && data.files.length > 0) {
-                    data.files.forEach(filePath => {
-                        const div = document.createElement('div');
-                        div.className = `file-item ${filePath === currentFile ? 'active' : ''}`;
-                        div.innerHTML = `<i class="far ${filePath.includes('/') ? 'fa-folder text-warning' : 'fa-file-code text-info'} mr-2"></i><span>${filePath}</span>`;
-                        div.onclick = () => {
-                            openFile(filePath);
-                            if (window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('show-mobile');
-                        };
-                        listContainer.appendChild(div);
-                    });
-                    if (!data.files.includes(currentFile)) currentFile = data.files[0];
-                } else listContainer.innerHTML = '<span class="small text-muted p-2 d-block">No files</span>';
-            } catch (e) { logSystem("Error loading files"); }
+                    folderLabel.appendChild(labelGroup);
+                    folderLabel.appendChild(actionsDiv);
+
+                    const childrenContainer = document.createElement('div');
+                    childrenContainer.className = 'tree-children open'; 
+                    
+                    folderLabel.onclick = (e) => {
+                        if (e.target.closest('button')) return;
+                        e.stopPropagation(); 
+                        childrenContainer.classList.toggle('open');
+                        const icon = folderLabel.querySelector('.folder-toggle');
+                        if(childrenContainer.classList.contains('open')) { icon.className = "fas fa-chevron-down folder-toggle"; } 
+                        else { icon.className = "fas fa-chevron-right folder-toggle"; }
+                    };
+                    
+                    folderDiv.appendChild(folderLabel); 
+                    folderDiv.appendChild(childrenContainer); 
+                    container.appendChild(folderDiv);
+                    renderTree(node.children, childrenContainer, level + 1);
+                } else {
+                    const fileDiv = document.createElement('div');
+                    fileDiv.className = `tree-file ${node.path === currentFile ? 'active' : ''}`;
+                    fileDiv.style.paddingLeft = `${paddingLeft}px`; 
+                    fileDiv.setAttribute('data-path', node.path);
+                    
+                    const labelGroup = document.createElement('div');
+                    labelGroup.className = 'tree-label-group';
+                    labelGroup.innerHTML = `<span class="tree-icon"><i class="fas fa-file-code text-info"></i></span> <span class="text-truncate">${node.name}</span>`;
+                    
+                    const actionsDiv = document.createElement('div');
+                    actionsDiv.className = 'tree-item-actions';
+                    actionsDiv.innerHTML = `
+                        <button onclick="renameItem(event, '${node.path}', false)" title="Rename file"><i class="fas fa-edit"></i></button>
+                        <button onclick="deleteItem(event, '${node.path}', false)" title="Delete file"><i class="fas fa-trash-alt text-danger"></i></button>
+                    `;
+
+                    fileDiv.appendChild(labelGroup);
+                    fileDiv.appendChild(actionsDiv);
+
+                    fileDiv.onclick = (e) => {
+                        if (e.target.closest('button')) return;
+                        e.stopPropagation();
+                        document.querySelectorAll('.tree-file').forEach(el => el.classList.remove('active'));
+                        fileDiv.classList.add('active'); openFile(node.path);
+                        if (window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('show-mobile');
+                    };
+                    container.appendChild(fileDiv);
+                }
+            });
+        }
+
+        async function loadFileList() {
+            const res = await apiFetch(`api.php?action=list_files&project=${encodeURIComponent(currentProject)}`);
+            const data = await res.json();
+            const listContainer = document.getElementById('file-list');
+            listContainer.innerHTML = '';
+            if (data.status === 'success' && data.files.length > 0) {
+                renderTree(data.files, listContainer, 0);
+            } else {
+                listContainer.innerHTML = '<span class="small text-muted p-2 d-block">No files</span>';
+            }
+        }
+
+        async function createFolder() {
+            const folderPath = prompt("Enter folder path (e.g. 'sys/linux'):");
+            if (!folderPath) return;
+            const res = await apiFetch(`api.php?action=create_folder&project=${encodeURIComponent(currentProject)}&file=${encodeURIComponent(folderPath)}`, { method: 'POST' });
+            const data = await res.json();
+            if (data.status === 'success') await loadFileList(); else alert(data.message);
         }
 
         async function createFile() {
-            const filePath = prompt("Enter file path (e.g. 'main.hac'):");
+            const filePath = prompt("Enter file path (e.g. 'sys/output.hac'):");
             if (!filePath) return;
-            try {
-                const res = await fetch(`api.php?action=create_file&project=${encodeURIComponent(currentProject)}&file=${encodeURIComponent(filePath)}`, { method: 'POST' });
-                const data = await res.json();
-                if (data.status === 'success') {
-                    await loadFileList(); await openFile(data.file);
-                } else alert(data.message);
-            } catch (e) { logSystem("Error: " + e.message); }
+            const res = await apiFetch(`api.php?action=create_file&project=${encodeURIComponent(currentProject)}&file=${encodeURIComponent(filePath)}`, { method: 'POST' });
+            const data = await res.json();
+            if (data.status === 'success') { await loadFileList(); await openFile(data.file); } else alert(data.message);
+        }
+
+        async function renameItem(event, path, isFolder) {
+            event.stopPropagation();
+            const parts = path.split('/');
+            const currentName = parts[parts.length - 1];
+            const newName = prompt(`Enter new name for ${isFolder ? 'folder' : 'file'}:`, currentName);
+            if (!newName || newName === currentName) return;
+
+            const res = await apiFetch(`api.php?action=rename&project=${encodeURIComponent(currentProject)}&file=${encodeURIComponent(path)}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ new_name: newName })
+            });
+            const data = await res.json();
+            if (data.status === 'success') {
+                await loadFileList();
+                if (!isFolder && currentFile === path) {
+                    openFile(data.new_path);
+                }
+            } else {
+                alert(data.message);
+            }
+        }
+
+        async function deleteItem(event, path, isFolder) {
+            event.stopPropagation();
+            if (!confirm(`Are you sure you want to delete this ${isFolder ? 'folder and its contents' : 'file'}?`)) return;
+
+            const res = await apiFetch(`api.php?action=delete&project=${encodeURIComponent(currentProject)}&file=${encodeURIComponent(path)}`, {
+                method: 'POST'
+            });
+            const data = await res.json();
+            if (data.status === 'success') {
+                await loadFileList();
+                if (!isFolder && currentFile === path) {
+                    currentFile = 'main.hac';
+                    openFile('main.hac');
+                }
+            } else {
+                alert(data.message);
+            }
         }
 
         async function openFile(filePath) {
             currentFile = filePath;
             document.getElementById('active-file-title').textContent = `${currentProject} / ${filePath}`;
-            try {
-                const res = await fetch(`api.php?action=load&project=${encodeURIComponent(currentProject)}&file=${encodeURIComponent(filePath)}`);
-                const data = await res.json();
-                if (data.status === 'success') {
-                    document.getElementById('code-editor').value = data.content;
-                    errorLines.clear();
-                    updateLineNumbers();
-                    await loadFileList();
-                } else alert(data.message);
-            } catch (e) { logSystem("Error opening file"); }
+            document.querySelectorAll('.tree-file').forEach(el => el.classList.toggle('active', el.getAttribute('data-path') === filePath));
+            const res = await apiFetch(`api.php?action=load&project=${encodeURIComponent(currentProject)}&file=${encodeURIComponent(filePath)}`);
+            const data = await res.json();
+            if (data.status === 'success') {
+                document.getElementById('code-editor').value = data.content;
+                errorLines.clear(); updateLineNumbers();
+            } else alert(data.message);
         }
 
         async function saveFile() {
             const statusInd = document.getElementById('status-indicator');
-            try {
-                const res = await fetch(`api.php?action=save&project=${encodeURIComponent(currentProject)}&file=${encodeURIComponent(currentFile)}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ content: document.getElementById('code-editor').value })
-                });
-                const data = await res.json();
-                if (data.status === 'success') {
-                    statusInd.textContent = "Saved"; statusInd.className = "badge badge-success mr-2";
-                    setTimeout(() => { statusInd.textContent = "Ready"; statusInd.className = "badge badge-secondary mr-2"; }, 2000);
-                } else alert("Save Error: " + data.message);
-            } catch (e) { alert("Save request failed: " + e.message); }
+            const res = await apiFetch(`api.php?action=save&project=${encodeURIComponent(currentProject)}&file=${encodeURIComponent(currentFile)}`, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ content: document.getElementById('code-editor').value })
+            });
+            const data = await res.json();
+            if (data.status === 'success') {
+                statusInd.textContent = "Saved"; statusInd.className = "badge badge-success mr-2";
+                setTimeout(() => { statusInd.textContent = "Ready"; statusInd.className = "badge badge-secondary mr-2"; }, 2000);
+            } else alert("Save Error: " + data.message);
         }
 
-        // --- COMPILE ENGINE ---
+        // --- COMPILATION & UI RENDERING ---
+        function getTimestamp() { return `[${new Date().toTimeString().split(' ')[0]}] `; }
+        function formatLogWithTimestamps(rawText) {
+            if (!rawText) return ''; const ts = getTimestamp();
+            return rawText.split('\n').map(line => line.trim() ? `${ts}${line}` : line).join('\n');
+        }
+
         async function compileAndRun() {
             const codeContent = document.getElementById('code-editor').value;
             const statusIndicator = document.getElementById('status-indicator');
-            
-            statusIndicator.textContent = "Compiling...";
-            statusIndicator.className = "badge badge-warning mr-2";
-            errorLines.clear();
-            updateLineNumbers(); 
+            statusIndicator.textContent = "Compiling..."; statusIndicator.className = "badge badge-warning mr-2";
+            errorLines.clear(); updateLineNumbers(); 
 
             try {
-                const res = await fetch(`api.php?action=compile_and_fetch&project=${encodeURIComponent(currentProject)}&file=${encodeURIComponent(currentFile)}`, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ content: codeContent })
+                const res = await apiFetch(`api.php?action=compile_and_fetch&project=${encodeURIComponent(currentProject)}&file=${encodeURIComponent(currentFile)}`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ content: codeContent })
                 });
-
                 const response = await res.json();
                 
                 if (response.status === 'success') {
-                    statusIndicator.textContent = "Build OK";
-                    statusIndicator.className = "badge badge-success mr-2";
-
-                    currentRunArtifacts.cli_logs = formatLogWithTimestamps(response.cli_logs) || `${getTimestamp()}No CLI output produced.`;
-                    currentRunArtifacts.errors   = formatLogWithTimestamps(response.errors) || `${getTimestamp()}0 Errors`;
+                    statusIndicator.textContent = "Build OK"; statusIndicator.className = "badge badge-success mr-2";
+                    currentRunArtifacts.cli_logs = formatLogWithTimestamps(response.cli_logs) || `${getTimestamp()}No CLI output.`;
+                    currentRunArtifacts.errors = formatLogWithTimestamps(response.errors) || `${getTimestamp()}0 Errors`;
                     
-                    if (response.artifacts) {
-                        currentRunArtifacts.lexer      = response.artifacts.lexer;
-                        currentRunArtifacts.parser     = response.artifacts.parser;
-                        currentRunArtifacts.ast_valid  = response.artifacts.ast_valid;
-                        currentRunArtifacts.symbol     = response.artifacts.symbol;
-                        currentRunArtifacts.lowering_1 = response.artifacts.lowering_1 || response.artifacts.lowering1 || response.artifacts.lowering;
-                        currentRunArtifacts.lowering_2 = response.artifacts.lowering_2 || response.artifacts.lowering2;
-                        currentRunArtifacts.nasm       = response.artifacts.nasm || response.artifacts.asm;
-                    }
-                    
-                    parseErrorsForLines(response.errors);
-
+                    // Automatically trigger binary execution after successful compilation!
+                    await executeProgram();
                 } else {
-                    statusIndicator.textContent = "Build Failed";
-                    statusIndicator.className = "badge badge-danger mr-2";
-                    
-                    const errorText = response.message || response.errors || "Compilation error";
-                    currentRunArtifacts.errors = formatLogWithTimestamps(errorText);
-                    
-                    if (response.cli_logs) currentRunArtifacts.cli_logs = formatLogWithTimestamps(response.cli_logs);
-                    
-                    parseErrorsForLines(errorText);
+                    statusIndicator.textContent = "Build Failed"; statusIndicator.className = "badge badge-danger mr-2";
+                    currentRunArtifacts.errors = formatLogWithTimestamps(response.message || response.errors);
+                    currentRunArtifacts.cli_logs = formatLogWithTimestamps(response.cli_logs);
                     switchConsoleTab('errors');
                 }
 
+                if (response.artifacts) {
+                    ['lexer', 'parser', 'ast_valid', 'symbol', 'lowering1', 'lowering2', 'nasm'].forEach(key => {
+                        const stateKey = key === 'lowering1' ? 'lowering_1' : key === 'lowering2' ? 'lowering_2' : key;
+                        currentRunArtifacts[stateKey] = response.artifacts[key];
+                    });
+                }
+                parseErrorsForLines(response.message || response.errors);
                 renderPipelineOutput(currentRunArtifacts[activePipelineStage]);
                 renderConsoleOutput();
 
             } catch (err) {
-                statusIndicator.textContent = "Error";
-                statusIndicator.className = "badge badge-danger mr-2";
+                statusIndicator.textContent = "Error"; statusIndicator.className = "badge badge-danger mr-2";
                 currentRunArtifacts.errors = formatLogWithTimestamps("Execution Error: " + err.message);
                 switchConsoleTab('errors');
             }
         }
 
-        // --- UI TAB SWITCHERS ---
         function switchPipelineTab(stage) {
             activePipelineStage = stage;
             ['lexer', 'parser', 'ast_valid', 'symbol', 'lowering_1', 'lowering_2', 'nasm'].forEach(s => {
-                const btn = document.getElementById(`tab-${s}`);
-                if (btn) btn.classList.remove('active');
+                document.getElementById(`tab-${s}`).classList.remove('active');
             });
-            const activeBtn = document.getElementById(`tab-${stage}`);
-            if (activeBtn) activeBtn.classList.add('active');
+            document.getElementById(`tab-${stage}`).classList.add('active');
             renderPipelineOutput(currentRunArtifacts[stage]);
         }
 
-        function switchConsoleTab(tab) {
+       function switchConsoleTab(tab) {
             activeConsoleTab = tab;
             document.getElementById('tab-cli').classList.remove('active');
             document.getElementById('tab-errors').classList.remove('active');
+            document.getElementById('tab-program').classList.remove('active');
             document.getElementById(`tab-${tab}`).classList.add('active');
+            
+            // Show stdin input box only when Program Console tab is active
+            document.getElementById('program-input-container').style.display = (tab === 'program') ? 'flex' : 'none';
             renderConsoleOutput();
         }
 
         function renderPipelineOutput(data) {
             const outputEl = document.getElementById('pipeline-output');
-            if (!outputEl) return;
-            if (data === null || data === undefined) { 
-                outputEl.textContent = "// No pipeline stage output available.\n// Press ▶ Run to build."; 
-                return; 
+            const lineNumEl = document.getElementById('pipeline-line-numbers');
+            if (data == null) { 
+                outputEl.textContent = "// No pipeline output.\n// Press ▶ Run to build."; lineNumEl.style.display = 'none'; return; 
             }
-            outputEl.textContent = (typeof data === 'object') ? JSON.stringify(data, null, 2) : String(data);
+            const textContent = typeof data === 'object' ? JSON.stringify(data, null, 2) : String(data);
+            outputEl.textContent = textContent;
+            if (activePipelineStage === 'nasm') {
+                const lines = textContent.split('\n').length; let html = '';
+                for (let i = 1; i <= lines; i++) html += `<div class="pipeline-line-num">${i}</div>`;
+                lineNumEl.innerHTML = html; lineNumEl.style.display = 'block';
+            } else { lineNumEl.style.display = 'none'; }
         }
 
         function renderConsoleOutput() {
             const consoleEl = document.getElementById('console-output');
-            if (!consoleEl) return;
-            
             if (activeConsoleTab === 'cli') {
-                consoleEl.textContent = currentRunArtifacts.cli_logs || `${getTimestamp()}// No CLI output generated yet.`;
+                consoleEl.textContent = currentRunArtifacts.cli_logs || `${getTimestamp()}// Ready`;
                 consoleEl.classList.remove('error-text');
-            } else {
-                consoleEl.textContent = currentRunArtifacts.errors || `${getTimestamp()}// No errors reported.`;
-                if (errorLines.size > 0) {
-                    consoleEl.classList.add('error-text');
-                } else {
-                    consoleEl.classList.remove('error-text');
-                }
+            } else if (activeConsoleTab === 'errors') {
+                consoleEl.textContent = currentRunArtifacts.errors || `${getTimestamp()}// No errors`;
+                consoleEl.classList.toggle('error-text', errorLines.size > 0);
+            } else if (activeConsoleTab === 'program') {
+                consoleEl.textContent = currentRunArtifacts.program_output || `${getTimestamp()}// No program output yet`;
+                consoleEl.classList.remove('error-text');
             }
         }
+        
+        async function copyContent(elementId, btnElement) {
+            const el = document.getElementById(elementId); if (!el) return;
+            const text = (el.tagName.toLowerCase() === 'textarea' || el.tagName.toLowerCase() === 'input') ? el.value : el.textContent;
+            try {
+                await navigator.clipboard.writeText(text);
+                const icon = btnElement.querySelector('i'); const originalClass = icon.className;
+                icon.className = 'fas fa-check text-success'; setTimeout(() => { icon.className = originalClass; }, 2000);
+            } catch (err) { alert("Clipboard block: " + err); }
+        }
+        
+        async function executeProgram(stdinValue = '') {
+            const statusIndicator = document.getElementById('status-indicator');
+            statusIndicator.textContent = "Running..."; statusIndicator.className = "badge badge-info mr-2";
+
+            try {
+                const res = await apiFetch(`api.php?action=execute&project=${encodeURIComponent(currentProject)}&file=${encodeURIComponent(currentFile)}`, {
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' }, 
+                    body: JSON.stringify({ stdin: stdinValue })
+                });
+                const data = await res.json();
+
+                if (data.status === 'success') {
+                    statusIndicator.textContent = "Executed"; statusIndicator.className = "badge badge-success mr-2";
+                    let output = "";
+                    if (data.stdout) output += data.stdout;
+                    if (data.stderr) output += "\n[stderr]:\n" + data.stderr;
+                    output += `\n\n[Process exited with code ${data.exit_code}]`;
+                    
+                    currentRunArtifacts.program_output = output;
+                } else {
+                    statusIndicator.textContent = "Exec Error"; statusIndicator.className = "badge badge-danger mr-2";
+                    currentRunArtifacts.program_output = "Execution Error: " + data.message;
+                }
+
+                setTimeout(() => { statusIndicator.textContent = "Ready"; statusIndicator.className = "badge badge-secondary mr-2"; }, 2000);
+                switchConsoleTab('program');
+
+            } catch (err) {
+                statusIndicator.textContent = "Error"; statusIndicator.className = "badge badge-danger mr-2";
+                currentRunArtifacts.program_output = "Network error during execution: " + err.message;
+                switchConsoleTab('program');
+            }
+        }
+
+        function sendProgramInput() {
+            const inputEl = document.getElementById('program-stdin-input');
+            const val = inputEl.value + "\n"; // Append newline for stdin
+            inputEl.value = '';
+            executeProgram(val);
+        }
+        
     </script>
 </body>
 </html>

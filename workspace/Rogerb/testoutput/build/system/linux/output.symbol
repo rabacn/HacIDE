@@ -28,6 +28,17 @@
                     "is_mutable": true,
                     "borrow_state": "none",
                     "borrow_count": 0
+                },
+                "msgSize": {
+                    "id": 2,
+                    "name": "msgSize",
+                    "scope_path": "global.testoutput.system.linux.output.print",
+                    "base_type": "u16",
+                    "capacity": null,
+                    "bits": null,
+                    "is_mutable": true,
+                    "borrow_state": "none",
+                    "borrow_count": 0
                 }
             }
         }

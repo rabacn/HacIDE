@@ -12,6 +12,10 @@
                         {
                             "type": "string",
                             "name": "p_msg"
+                        },
+                        {
+                            "type": "string_size",
+                            "name": "msgSize"
                         }
                     ],
                     "return_type": "null",
@@ -105,9 +109,9 @@
                                     }
                                 },
                                 {
-                                    "type": "imm",
-                                    "value": "13",
-                                    "data": "13"
+                                    "type": "variable",
+                                    "value": "msgSize",
+                                    "data": null
                                 }
                             ],
                             "line": 8,

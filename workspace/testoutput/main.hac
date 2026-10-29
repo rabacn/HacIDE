@@ -1,0 +1,32 @@
+// Code to compile
+target: x86_64;
+
+namespace testoutput { 
+
+    use system.linux.output
+    
+    data {
+        string msg = "Hello World\r\n";
+        string msg1 = "from Roger\r\n";
+        u32 tmp = 1;
+        u32 tmp1;
+    }
+
+/*    function print(string p_msg) : null {
+        mov rax, 1;
+        mov rdi, 1;
+        lea rsi, [rel p_msg];
+        mov rdx, 13;
+        syscall;
+    }*/
+
+    function main() : null {
+        while (tmp < 4 ) {
+          tmp1 = print(msg);
+          if (tmp == 2) {
+            tmp1 = print(msg1);
+          }
+           tmp = tmp + 1;
+        }
+    }
+}

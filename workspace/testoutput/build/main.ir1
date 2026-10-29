@@ -1,0 +1,428 @@
+{
+    "status": "lowered",
+    "ir": {
+        "structLayouts": [],
+        "symbolTable": {
+            "msg": {
+                "type": "string",
+                "size": 3,
+                "capacity": null,
+                "value": "Hello World\r\n",
+                "is_const": false
+            },
+            "msg1": {
+                "type": "string",
+                "size": 3,
+                "capacity": null,
+                "value": "from Roger\r\n",
+                "is_const": false
+            },
+            "tmp": {
+                "type": "u32",
+                "size": 4,
+                "capacity": null,
+                "value": "1",
+                "is_const": false
+            },
+            "tmp1": {
+                "type": "u32",
+                "size": 4,
+                "capacity": null,
+                "value": null,
+                "is_const": false
+            },
+            "p_msg": {
+                "type": "string",
+                "size": 8,
+                "capacity": null,
+                "value": null,
+                "is_param": true
+            }
+        },
+        "instructions": [
+            {
+                "mnemonic": "LABEL",
+                "operands": [
+                    {
+                        "type": "imm",
+                        "value": "print"
+                    }
+                ],
+                "line": 12
+            },
+            {
+                "mnemonic": "MOV",
+                "operands": [
+                    {
+                        "type": "mem",
+                        "value": {
+                            "symbolName": "p_msg",
+                            "offset": 0,
+                            "bitWidth": 64
+                        }
+                    },
+                    {
+                        "type": "reg",
+                        "value": "rdi"
+                    }
+                ],
+                "line": 12
+            },
+            {
+                "mnemonic": "MOV",
+                "operands": [
+                    {
+                        "type": "reg",
+                        "value": "rax"
+                    },
+                    {
+                        "type": "imm",
+                        "value": "1"
+                    }
+                ],
+                "line": 13
+            },
+            {
+                "mnemonic": "MOV",
+                "operands": [
+                    {
+                        "type": "reg",
+                        "value": "rdi"
+                    },
+                    {
+                        "type": "imm",
+                        "value": "1"
+                    }
+                ],
+                "line": 14
+            },
+            {
+                "mnemonic": "MOV",
+                "operands": [
+                    {
+                        "type": "reg",
+                        "value": "rsi"
+                    },
+                    {
+                        "type": "mem",
+                        "value": {
+                            "symbolName": "p_msg",
+                            "offset": 0,
+                            "bitWidth": 64
+                        }
+                    }
+                ],
+                "line": 15
+            },
+            {
+                "mnemonic": "MOV",
+                "operands": [
+                    {
+                        "type": "reg",
+                        "value": "rdx"
+                    },
+                    {
+                        "type": "imm",
+                        "value": "13"
+                    }
+                ],
+                "line": 16
+            },
+            {
+                "mnemonic": "SYSCALL",
+                "operands": [],
+                "line": 17
+            },
+            {
+                "mnemonic": "RET",
+                "operands": [],
+                "line": 12
+            },
+            {
+                "mnemonic": "LABEL",
+                "operands": [
+                    {
+                        "type": "imm",
+                        "value": "main"
+                    }
+                ],
+                "line": 20
+            },
+            {
+                "mnemonic": "LABEL",
+                "operands": [
+                    {
+                        "type": "imm",
+                        "value": "WHILE_START_0"
+                    }
+                ],
+                "line": 21
+            },
+            {
+                "mnemonic": "MOVSXD",
+                "operands": [
+                    {
+                        "type": "var",
+                        "value": "%temp_0"
+                    },
+                    {
+                        "type": "mem",
+                        "value": {
+                            "symbolName": "tmp",
+                            "offset": 0,
+                            "bitWidth": 32
+                        }
+                    }
+                ],
+                "line": 21
+            },
+            {
+                "mnemonic": "CMP",
+                "operands": [
+                    {
+                        "type": "var",
+                        "value": "%temp_0"
+                    },
+                    {
+                        "type": "imm",
+                        "value": "4"
+                    }
+                ],
+                "line": 21
+            },
+            {
+                "mnemonic": "JGE",
+                "operands": [
+                    {
+                        "type": "imm",
+                        "value": "WHILE_END_1"
+                    }
+                ],
+                "line": 21
+            },
+            {
+                "mnemonic": "LEA",
+                "operands": [
+                    {
+                        "type": "reg",
+                        "value": "rdi"
+                    },
+                    {
+                        "type": "mem",
+                        "value": {
+                            "symbolName": "msg",
+                            "offset": 2,
+                            "bitWidth": 8
+                        }
+                    }
+                ],
+                "line": 22
+            },
+            {
+                "mnemonic": "CALL",
+                "operands": [
+                    {
+                        "type": "imm",
+                        "value": "print"
+                    }
+                ],
+                "line": 22
+            },
+            {
+                "mnemonic": "STORE_32",
+                "operands": [
+                    {
+                        "type": "reg",
+                        "value": "rax"
+                    },
+                    {
+                        "type": "mem",
+                        "value": {
+                            "symbolName": "tmp1",
+                            "offset": 0,
+                            "bitWidth": 32
+                        }
+                    }
+                ],
+                "line": 22
+            },
+            {
+                "mnemonic": "MOVSXD",
+                "operands": [
+                    {
+                        "type": "var",
+                        "value": "%temp_1"
+                    },
+                    {
+                        "type": "mem",
+                        "value": {
+                            "symbolName": "tmp",
+                            "offset": 0,
+                            "bitWidth": 32
+                        }
+                    }
+                ],
+                "line": 23
+            },
+            {
+                "mnemonic": "CMP",
+                "operands": [
+                    {
+                        "type": "var",
+                        "value": "%temp_1"
+                    },
+                    {
+                        "type": "imm",
+                        "value": "2"
+                    }
+                ],
+                "line": 23
+            },
+            {
+                "mnemonic": "JNE",
+                "operands": [
+                    {
+                        "type": "imm",
+                        "value": "IF_END_2"
+                    }
+                ],
+                "line": 23
+            },
+            {
+                "mnemonic": "LEA",
+                "operands": [
+                    {
+                        "type": "reg",
+                        "value": "rdi"
+                    },
+                    {
+                        "type": "mem",
+                        "value": {
+                            "symbolName": "msg1",
+                            "offset": 2,
+                            "bitWidth": 8
+                        }
+                    }
+                ],
+                "line": 24
+            },
+            {
+                "mnemonic": "CALL",
+                "operands": [
+                    {
+                        "type": "imm",
+                        "value": "print"
+                    }
+                ],
+                "line": 24
+            },
+            {
+                "mnemonic": "STORE_32",
+                "operands": [
+                    {
+                        "type": "reg",
+                        "value": "rax"
+                    },
+                    {
+                        "type": "mem",
+                        "value": {
+                            "symbolName": "tmp1",
+                            "offset": 0,
+                            "bitWidth": 32
+                        }
+                    }
+                ],
+                "line": 24
+            },
+            {
+                "mnemonic": "LABEL",
+                "operands": [
+                    {
+                        "type": "imm",
+                        "value": "IF_END_2"
+                    }
+                ],
+                "line": 23
+            },
+            {
+                "mnemonic": "MOVSXD",
+                "operands": [
+                    {
+                        "type": "var",
+                        "value": "%temp_2"
+                    },
+                    {
+                        "type": "mem",
+                        "value": {
+                            "symbolName": "tmp",
+                            "offset": 0,
+                            "bitWidth": 32
+                        }
+                    }
+                ],
+                "line": 26
+            },
+            {
+                "mnemonic": "ADD",
+                "operands": [
+                    {
+                        "type": "var",
+                        "value": "%temp_3"
+                    },
+                    {
+                        "type": "var",
+                        "value": "%temp_2"
+                    },
+                    {
+                        "type": "imm",
+                        "value": "1"
+                    }
+                ],
+                "line": 26
+            },
+            {
+                "mnemonic": "STORE_32",
+                "operands": [
+                    {
+                        "type": "var",
+                        "value": "%temp_3"
+                    },
+                    {
+                        "type": "mem",
+                        "value": {
+                            "symbolName": "tmp",
+                            "offset": 0,
+                            "bitWidth": 32
+                        }
+                    }
+                ],
+                "line": 26
+            },
+            {
+                "mnemonic": "JMP",
+                "operands": [
+                    {
+                        "type": "imm",
+                        "value": "WHILE_START_0"
+                    }
+                ],
+                "line": 21
+            },
+            {
+                "mnemonic": "LABEL",
+                "operands": [
+                    {
+                        "type": "imm",
+                        "value": "WHILE_END_1"
+                    }
+                ],
+                "line": 21
+            },
+            {
+                "mnemonic": "RET",
+                "operands": [],
+                "line": 20
+            }
+        ]
+    }
+}

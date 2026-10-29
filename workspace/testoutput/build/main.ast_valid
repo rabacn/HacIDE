@@ -1,0 +1,313 @@
+{
+    "status": "validated",
+    "ast": [
+        {
+            "type": "metadata",
+            "key": "target",
+            "value": "x86_64",
+            "line": 2
+        },
+        {
+            "type": "namespace",
+            "name": "testoutput",
+            "body": [
+                {
+                    "type": "data_block",
+                    "variables": [
+                        {
+                            "type": "variable",
+                            "label": "msg",
+                            "value": "Hello World\r\n",
+                            "baseTypeInfo": "string",
+                            "capacityTypeInfo": 13,
+                            "align": null,
+                            "is_const": false,
+                            "line": 6,
+                            "symbol_id": 1,
+                            "resolved_bits": 64
+                        },
+                        {
+                            "type": "variable",
+                            "label": "msg1",
+                            "value": "from Roger\r\n",
+                            "baseTypeInfo": "string",
+                            "capacityTypeInfo": 12,
+                            "align": null,
+                            "is_const": false,
+                            "line": 7,
+                            "symbol_id": 2,
+                            "resolved_bits": 64
+                        },
+                        {
+                            "type": "variable",
+                            "label": "tmp",
+                            "value": "1",
+                            "baseTypeInfo": "u32",
+                            "capacityTypeInfo": null,
+                            "align": null,
+                            "is_const": false,
+                            "line": 8,
+                            "symbol_id": 3,
+                            "resolved_bits": 32
+                        },
+                        {
+                            "type": "variable",
+                            "label": "tmp1",
+                            "value": null,
+                            "baseTypeInfo": "u32",
+                            "capacityTypeInfo": null,
+                            "align": null,
+                            "is_const": false,
+                            "line": 9,
+                            "symbol_id": 4,
+                            "resolved_bits": 32
+                        }
+                    ]
+                },
+                {
+                    "type": "function",
+                    "name": "print",
+                    "params": [
+                        {
+                            "type": "string",
+                            "name": "p_msg"
+                        }
+                    ],
+                    "return_type": "null",
+                    "body": [
+                        {
+                            "type": "asm",
+                            "mnemonic": "mov",
+                            "operands": [
+                                {
+                                    "type": "reg",
+                                    "value": "rax",
+                                    "data": {
+                                        "bits": 64,
+                                        "id": 0,
+                                        "type": "gpr"
+                                    }
+                                },
+                                {
+                                    "type": "imm",
+                                    "value": "1",
+                                    "data": "1",
+                                    "resolved_bits": 64
+                                }
+                            ],
+                            "line": 13,
+                            "schema_info": {
+                                "family": "move_standard",
+                                "type": "move"
+                            }
+                        },
+                        {
+                            "type": "asm",
+                            "mnemonic": "mov",
+                            "operands": [
+                                {
+                                    "type": "reg",
+                                    "value": "rdi",
+                                    "data": {
+                                        "bits": 64,
+                                        "id": 7,
+                                        "type": "gpr"
+                                    }
+                                },
+                                {
+                                    "type": "imm",
+                                    "value": "1",
+                                    "data": "1",
+                                    "resolved_bits": 64
+                                }
+                            ],
+                            "line": 14,
+                            "schema_info": {
+                                "family": "move_standard",
+                                "type": "move"
+                            }
+                        },
+                        {
+                            "type": "asm",
+                            "mnemonic": "lea",
+                            "operands": [
+                                {
+                                    "type": "reg",
+                                    "value": "rsi",
+                                    "data": {
+                                        "bits": 64,
+                                        "id": 6,
+                                        "type": "gpr"
+                                    }
+                                },
+                                {
+                                    "type": "mem",
+                                    "value": "[rel p_msg]",
+                                    "data": null,
+                                    "resolved_bits": 64
+                                }
+                            ],
+                            "line": 15,
+                            "schema_info": {
+                                "family": "address_calc",
+                                "type": "address"
+                            }
+                        },
+                        {
+                            "type": "asm",
+                            "mnemonic": "mov",
+                            "operands": [
+                                {
+                                    "type": "reg",
+                                    "value": "rdx",
+                                    "data": {
+                                        "bits": 64,
+                                        "id": 2,
+                                        "type": "gpr"
+                                    }
+                                },
+                                {
+                                    "type": "imm",
+                                    "value": "13",
+                                    "data": "13",
+                                    "resolved_bits": 64
+                                }
+                            ],
+                            "line": 16,
+                            "schema_info": {
+                                "family": "move_standard",
+                                "type": "move"
+                            }
+                        },
+                        {
+                            "type": "asm",
+                            "mnemonic": "syscall",
+                            "operands": [],
+                            "line": 17,
+                            "schema_info": {
+                                "family": "system",
+                                "type": "clobber",
+                                "clobbers": [
+                                    "rcx",
+                                    "r11"
+                                ]
+                            }
+                        }
+                    ],
+                    "line": 12,
+                    "scope_path": "global.testoutput.print"
+                },
+                {
+                    "type": "function",
+                    "name": "main",
+                    "params": [],
+                    "return_type": "null",
+                    "body": [
+                        {
+                            "type": "while_loop",
+                            "condition": {
+                                "type": "binary_op",
+                                "operator": "<",
+                                "left": {
+                                    "type": "variable_reference",
+                                    "name": "tmp",
+                                    "line": 21
+                                },
+                                "right": "4",
+                                "line": 21
+                            },
+                            "body": [
+                                {
+                                    "type": "assignment",
+                                    "target": {
+                                        "type": "variable_reference",
+                                        "name": "tmp1",
+                                        "line": 22
+                                    },
+                                    "value": {
+                                        "type": "function_call",
+                                        "name": "print",
+                                        "args": [
+                                            {
+                                                "type": "variable_reference",
+                                                "name": "msg",
+                                                "line": 22
+                                            }
+                                        ],
+                                        "line": 22
+                                    },
+                                    "line": 22
+                                },
+                                {
+                                    "type": "if_statement",
+                                    "condition": {
+                                        "type": "binary_op",
+                                        "operator": "==",
+                                        "left": {
+                                            "type": "variable_reference",
+                                            "name": "tmp",
+                                            "line": 23
+                                        },
+                                        "right": "2",
+                                        "line": 23
+                                    },
+                                    "body": [
+                                        {
+                                            "type": "assignment",
+                                            "target": {
+                                                "type": "variable_reference",
+                                                "name": "tmp1",
+                                                "line": 24
+                                            },
+                                            "value": {
+                                                "type": "function_call",
+                                                "name": "print",
+                                                "args": [
+                                                    {
+                                                        "type": "variable_reference",
+                                                        "name": "msg1",
+                                                        "line": 24
+                                                    }
+                                                ],
+                                                "line": 24
+                                            },
+                                            "line": 24
+                                        }
+                                    ],
+                                    "elseif_branches": [],
+                                    "else_body": null,
+                                    "line": 23
+                                },
+                                {
+                                    "type": "assignment",
+                                    "target": {
+                                        "type": "variable_reference",
+                                        "name": "tmp",
+                                        "line": 26
+                                    },
+                                    "value": {
+                                        "type": "binary_op",
+                                        "operator": "+",
+                                        "left": {
+                                            "type": "variable_reference",
+                                            "name": "tmp",
+                                            "line": 26
+                                        },
+                                        "right": "1",
+                                        "line": 26
+                                    },
+                                    "line": 26
+                                }
+                            ],
+                            "line": 21
+                        }
+                    ],
+                    "line": 20,
+                    "scope_path": "global.testoutput.main"
+                }
+            ],
+            "line": 4,
+            "scope_path": "global.testoutput"
+        }
+    ]
+}

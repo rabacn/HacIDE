@@ -1,0 +1,211 @@
+{
+    "status": "lowered",
+    "ir": {
+        "structLayouts": {
+            "test": {
+                "totalSize": 6,
+                "fieldOffsets": {
+                    "first": {
+                        "offset": 0,
+                        "bitOffset": 0,
+                        "bitWidth": null,
+                        "size": 4,
+                        "dataType": "u32"
+                    },
+                    "second": {
+                        "offset": 4,
+                        "bitOffset": 0,
+                        "bitWidth": 16,
+                        "size": 2,
+                        "dataType": "u16"
+                    }
+                },
+                "name": "test"
+            }
+        },
+        "symbolTable": {
+            "small_var": {
+                "type": "u32",
+                "size": 4,
+                "capacity": null,
+                "value": null,
+                "is_const": false
+            },
+            "hello": {
+                "type": "string",
+                "size": 3,
+                "capacity": null,
+                "value": "Hello World",
+                "is_const": false
+            },
+            "EOF": {
+                "type": "u32",
+                "size": 4,
+                "capacity": null,
+                "value": "32",
+                "is_const": true
+            },
+            "cs1": {
+                "type": "test",
+                "size": 6,
+                "capacity": null,
+                "value": null,
+                "is_const": false
+            }
+        },
+        "instructions": [
+            {
+                "mnemonic": "LABEL",
+                "operands": [
+                    {
+                        "type": "imm",
+                        "value": "main"
+                    }
+                ],
+                "line": 16
+            },
+            {
+                "mnemonic": "PUSH",
+                "operands": [
+                    {
+                        "type": "reg",
+                        "value": "rbx"
+                    }
+                ],
+                "line": 17
+            },
+            {
+                "mnemonic": "NOP",
+                "operands": [],
+                "line": 18
+            },
+            {
+                "mnemonic": "MOV",
+                "operands": [
+                    {
+                        "type": "reg",
+                        "value": "rbx"
+                    },
+                    {
+                        "type": "imm",
+                        "value": "0x3F"
+                    }
+                ],
+                "line": 19
+            },
+            {
+                "mnemonic": "LEA",
+                "operands": [
+                    {
+                        "type": "reg",
+                        "value": "rax"
+                    },
+                    {
+                        "type": "mem",
+                        "value": {
+                            "symbolName": "hello",
+                            "offset": 2,
+                            "bitWidth": 8
+                        }
+                    }
+                ],
+                "line": 21
+            },
+            {
+                "mnemonic": "STORE_32",
+                "operands": [
+                    {
+                        "type": "imm",
+                        "value": "32"
+                    },
+                    {
+                        "type": "mem",
+                        "value": {
+                            "symbolName": "cs1",
+                            "offset": 0,
+                            "bitWidth": 32
+                        }
+                    }
+                ],
+                "line": 22
+            },
+            {
+                "mnemonic": "MOVSXD",
+                "operands": [
+                    {
+                        "type": "var",
+                        "value": "%temp_0"
+                    },
+                    {
+                        "type": "mem",
+                        "value": {
+                            "symbolName": "cs1",
+                            "offset": 0,
+                            "bitWidth": 32
+                        }
+                    }
+                ],
+                "line": 23
+            },
+            {
+                "mnemonic": "ADD",
+                "operands": [
+                    {
+                        "type": "var",
+                        "value": "%temp_1"
+                    },
+                    {
+                        "type": "var",
+                        "value": "%temp_0"
+                    },
+                    {
+                        "type": "imm",
+                        "value": "3"
+                    }
+                ],
+                "line": 23
+            },
+            {
+                "mnemonic": "IMUL",
+                "operands": [
+                    {
+                        "type": "var",
+                        "value": "%temp_2"
+                    },
+                    {
+                        "type": "imm",
+                        "value": "2"
+                    },
+                    {
+                        "type": "var",
+                        "value": "%temp_1"
+                    }
+                ],
+                "line": 23
+            },
+            {
+                "mnemonic": "STORE_16",
+                "operands": [
+                    {
+                        "type": "var",
+                        "value": "%temp_2"
+                    },
+                    {
+                        "type": "mem",
+                        "value": {
+                            "symbolName": "cs1",
+                            "offset": 4,
+                            "bitWidth": 16
+                        }
+                    }
+                ],
+                "line": 23
+            },
+            {
+                "mnemonic": "RET",
+                "operands": [],
+                "line": 16
+            }
+        ]
+    }
+}

@@ -1,0 +1,25 @@
+// Code to compile
+target: x86_64;
+stringbytes: 4;
+
+Use system.linux.output as output;
+
+namespace testoutput {
+    
+    data {
+        string msg = "Hello World\r\n";
+        string msg1 = "from Roger\r\n";
+        u32 tmp = 1;
+        u32 tmp1;
+    }
+
+    function main() : null {
+        while (tmp < 4 ) {
+          tmp1 = output.print(msg, msg.size);
+          if (tmp == 2) {
+           tmp1 = output.print(msg1, msg1.size);
+         }
+           tmp = tmp + 1;
+        }
+    }
+}

@@ -1,0 +1,246 @@
+{
+    "AST": "Parsed",
+    "ast": [
+        {
+            "type": "metadata",
+            "key": "target",
+            "value": "x86_64",
+            "line": 1
+        },
+        {
+            "type": "namespace",
+            "name": "tmp3",
+            "body": [
+                {
+                    "type": "data_block",
+                    "variables": [
+                        {
+                            "type": "variable",
+                            "label": "small_var",
+                            "value": null,
+                            "baseTypeInfo": "u32",
+                            "capacityTypeInfo": null,
+                            "align": null,
+                            "is_const": false,
+                            "line": 5
+                        },
+                        {
+                            "type": "variable",
+                            "label": "hello",
+                            "value": "Hello World",
+                            "baseTypeInfo": "string",
+                            "capacityTypeInfo": 15,
+                            "align": null,
+                            "is_const": false,
+                            "line": 6
+                        },
+                        {
+                            "type": "variable",
+                            "label": "EOF",
+                            "value": "32",
+                            "baseTypeInfo": "u32",
+                            "capacityTypeInfo": null,
+                            "align": null,
+                            "is_const": true,
+                            "line": 7
+                        },
+                        {
+                            "type": "struct_definition",
+                            "name": "test",
+                            "members": [
+                                {
+                                    "type": "struct_member",
+                                    "name": "first",
+                                    "dataType": "u32",
+                                    "capacity": null,
+                                    "bitWidth": null,
+                                    "byteOffset": null,
+                                    "isPadding": false,
+                                    "line": 9
+                                },
+                                {
+                                    "type": "struct_member",
+                                    "name": "second",
+                                    "dataType": "u16",
+                                    "capacity": null,
+                                    "bitWidth": 16,
+                                    "byteOffset": null,
+                                    "isPadding": false,
+                                    "line": 10
+                                },
+                                {
+                                    "type": "struct_padding",
+                                    "kind": "bit",
+                                    "size": 16,
+                                    "isPadding": true,
+                                    "line": 11
+                                }
+                            ],
+                            "line": 8
+                        },
+                        {
+                            "type": "variable",
+                            "label": "cs1",
+                            "value": null,
+                            "baseTypeInfo": "test",
+                            "capacityTypeInfo": null,
+                            "align": null,
+                            "is_const": false,
+                            "line": 13
+                        }
+                    ]
+                },
+                {
+                    "type": "function",
+                    "name": "main",
+                    "params": [],
+                    "return_type": "null",
+                    "body": [
+                        {
+                            "type": "asm",
+                            "mnemonic": "push",
+                            "operands": [
+                                {
+                                    "type": "reg",
+                                    "value": "rbx",
+                                    "data": {
+                                        "bits": 64,
+                                        "id": 3,
+                                        "type": "gpr"
+                                    }
+                                }
+                            ],
+                            "line": 17,
+                            "schema_info": {
+                                "family": "plus_rd",
+                                "base": 80,
+                                "type": "stack"
+                            }
+                        },
+                        {
+                            "type": "asm",
+                            "mnemonic": "nop",
+                            "operands": [],
+                            "line": 18,
+                            "schema_info": {
+                                "family": "no_args",
+                                "base": 144,
+                                "type": "generic"
+                            }
+                        },
+                        {
+                            "type": "asm",
+                            "mnemonic": "mov",
+                            "operands": [
+                                {
+                                    "type": "reg",
+                                    "value": "rbx",
+                                    "data": {
+                                        "bits": 64,
+                                        "id": 3,
+                                        "type": "gpr"
+                                    }
+                                },
+                                {
+                                    "type": "imm",
+                                    "value": "0x3F",
+                                    "data": "0x3F"
+                                }
+                            ],
+                            "line": 19,
+                            "schema_info": {
+                                "family": "move_standard",
+                                "type": "move"
+                            }
+                        },
+                        {
+                            "type": "asm",
+                            "mnemonic": "lea",
+                            "operands": [
+                                {
+                                    "type": "reg",
+                                    "value": "rax",
+                                    "data": {
+                                        "bits": 64,
+                                        "id": 0,
+                                        "type": "gpr"
+                                    }
+                                },
+                                {
+                                    "type": "variable",
+                                    "value": "hello",
+                                    "data": null
+                                }
+                            ],
+                            "line": 21,
+                            "schema_info": {
+                                "family": "address_calc",
+                                "type": "address"
+                            }
+                        },
+                        {
+                            "type": "assignment",
+                            "target": {
+                                "type": "member_access",
+                                "object": "cs1",
+                                "member": "first",
+                                "path": [
+                                    "cs1",
+                                    "first"
+                                ],
+                                "full": "cs1.first",
+                                "line": 22
+                            },
+                            "value": {
+                                "type": "variable_reference",
+                                "name": "EOF",
+                                "line": 22
+                            },
+                            "line": 22
+                        },
+                        {
+                            "type": "assignment",
+                            "target": {
+                                "type": "member_access",
+                                "object": "cs1",
+                                "member": "second",
+                                "path": [
+                                    "cs1",
+                                    "second"
+                                ],
+                                "full": "cs1.second",
+                                "line": 23
+                            },
+                            "value": {
+                                "type": "binary_op",
+                                "operator": "*",
+                                "left": "2",
+                                "right": {
+                                    "type": "binary_op",
+                                    "operator": "+",
+                                    "left": {
+                                        "type": "member_access",
+                                        "object": "cs1",
+                                        "member": "first",
+                                        "path": [
+                                            "cs1",
+                                            "first"
+                                        ],
+                                        "full": "cs1.first",
+                                        "line": 23
+                                    },
+                                    "right": "3",
+                                    "line": 23
+                                },
+                                "line": 23
+                            },
+                            "line": 23
+                        }
+                    ],
+                    "line": 16
+                }
+            ],
+            "line": 3
+        }
+    ]
+}

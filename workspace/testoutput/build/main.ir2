@@ -1,0 +1,539 @@
+{
+    "stage": "lowering_phase_2",
+    "source_stage": "lowering_phase_1",
+    "metadata": {
+        "target": "HAC-TAC-IR2",
+        "timestamp": "2026-10-04 17:20:53"
+    },
+    "functions": [],
+    "instructions": [
+        {
+            "op": "EVAL",
+            "dst": "$t0",
+            "raw_type": "Unknown",
+            "data": {
+                "mnemonic": "LABEL",
+                "operands": [
+                    {
+                        "type": "imm",
+                        "value": "print"
+                    }
+                ],
+                "line": 12
+            }
+        },
+        {
+            "op": "EVAL",
+            "dst": "$t1",
+            "raw_type": "Unknown",
+            "data": {
+                "mnemonic": "MOV",
+                "operands": [
+                    {
+                        "type": "mem",
+                        "value": {
+                            "symbolName": "p_msg",
+                            "offset": 0,
+                            "bitWidth": 64
+                        }
+                    },
+                    {
+                        "type": "reg",
+                        "value": "rdi"
+                    }
+                ],
+                "line": 12
+            }
+        },
+        {
+            "op": "EVAL",
+            "dst": "$t2",
+            "raw_type": "Unknown",
+            "data": {
+                "mnemonic": "MOV",
+                "operands": [
+                    {
+                        "type": "reg",
+                        "value": "rax"
+                    },
+                    {
+                        "type": "imm",
+                        "value": "1"
+                    }
+                ],
+                "line": 13
+            }
+        },
+        {
+            "op": "EVAL",
+            "dst": "$t3",
+            "raw_type": "Unknown",
+            "data": {
+                "mnemonic": "MOV",
+                "operands": [
+                    {
+                        "type": "reg",
+                        "value": "rdi"
+                    },
+                    {
+                        "type": "imm",
+                        "value": "1"
+                    }
+                ],
+                "line": 14
+            }
+        },
+        {
+            "op": "EVAL",
+            "dst": "$t4",
+            "raw_type": "Unknown",
+            "data": {
+                "mnemonic": "MOV",
+                "operands": [
+                    {
+                        "type": "reg",
+                        "value": "rsi"
+                    },
+                    {
+                        "type": "mem",
+                        "value": {
+                            "symbolName": "p_msg",
+                            "offset": 0,
+                            "bitWidth": 64
+                        }
+                    }
+                ],
+                "line": 15
+            }
+        },
+        {
+            "op": "EVAL",
+            "dst": "$t5",
+            "raw_type": "Unknown",
+            "data": {
+                "mnemonic": "MOV",
+                "operands": [
+                    {
+                        "type": "reg",
+                        "value": "rdx"
+                    },
+                    {
+                        "type": "imm",
+                        "value": "13"
+                    }
+                ],
+                "line": 16
+            }
+        },
+        {
+            "op": "EVAL",
+            "dst": "$t6",
+            "raw_type": "Unknown",
+            "data": {
+                "mnemonic": "SYSCALL",
+                "operands": [],
+                "line": 17
+            }
+        },
+        {
+            "op": "EVAL",
+            "dst": "$t7",
+            "raw_type": "Unknown",
+            "data": {
+                "mnemonic": "RET",
+                "operands": [],
+                "line": 12
+            }
+        },
+        {
+            "op": "EVAL",
+            "dst": "$t8",
+            "raw_type": "Unknown",
+            "data": {
+                "mnemonic": "LABEL",
+                "operands": [
+                    {
+                        "type": "imm",
+                        "value": "main"
+                    }
+                ],
+                "line": 20
+            }
+        },
+        {
+            "op": "EVAL",
+            "dst": "$t9",
+            "raw_type": "Unknown",
+            "data": {
+                "mnemonic": "LABEL",
+                "operands": [
+                    {
+                        "type": "imm",
+                        "value": "WHILE_START_0"
+                    }
+                ],
+                "line": 21
+            }
+        },
+        {
+            "op": "EVAL",
+            "dst": "$t10",
+            "raw_type": "Unknown",
+            "data": {
+                "mnemonic": "MOVSXD",
+                "operands": [
+                    {
+                        "type": "var",
+                        "value": "%temp_0"
+                    },
+                    {
+                        "type": "mem",
+                        "value": {
+                            "symbolName": "tmp",
+                            "offset": 0,
+                            "bitWidth": 32
+                        }
+                    }
+                ],
+                "line": 21
+            }
+        },
+        {
+            "op": "EVAL",
+            "dst": "$t11",
+            "raw_type": "Unknown",
+            "data": {
+                "mnemonic": "CMP",
+                "operands": [
+                    {
+                        "type": "var",
+                        "value": "%temp_0"
+                    },
+                    {
+                        "type": "imm",
+                        "value": "4"
+                    }
+                ],
+                "line": 21
+            }
+        },
+        {
+            "op": "EVAL",
+            "dst": "$t12",
+            "raw_type": "Unknown",
+            "data": {
+                "mnemonic": "JGE",
+                "operands": [
+                    {
+                        "type": "imm",
+                        "value": "WHILE_END_1"
+                    }
+                ],
+                "line": 21
+            }
+        },
+        {
+            "op": "EVAL",
+            "dst": "$t13",
+            "raw_type": "Unknown",
+            "data": {
+                "mnemonic": "LEA",
+                "operands": [
+                    {
+                        "type": "reg",
+                        "value": "rdi"
+                    },
+                    {
+                        "type": "mem",
+                        "value": {
+                            "symbolName": "msg",
+                            "offset": 2,
+                            "bitWidth": 8
+                        }
+                    }
+                ],
+                "line": 22
+            }
+        },
+        {
+            "op": "EVAL",
+            "dst": "$t14",
+            "raw_type": "Unknown",
+            "data": {
+                "mnemonic": "CALL",
+                "operands": [
+                    {
+                        "type": "imm",
+                        "value": "print"
+                    }
+                ],
+                "line": 22
+            }
+        },
+        {
+            "op": "EVAL",
+            "dst": "$t15",
+            "raw_type": "Unknown",
+            "data": {
+                "mnemonic": "STORE_32",
+                "operands": [
+                    {
+                        "type": "reg",
+                        "value": "rax"
+                    },
+                    {
+                        "type": "mem",
+                        "value": {
+                            "symbolName": "tmp1",
+                            "offset": 0,
+                            "bitWidth": 32
+                        }
+                    }
+                ],
+                "line": 22
+            }
+        },
+        {
+            "op": "EVAL",
+            "dst": "$t16",
+            "raw_type": "Unknown",
+            "data": {
+                "mnemonic": "MOVSXD",
+                "operands": [
+                    {
+                        "type": "var",
+                        "value": "%temp_1"
+                    },
+                    {
+                        "type": "mem",
+                        "value": {
+                            "symbolName": "tmp",
+                            "offset": 0,
+                            "bitWidth": 32
+                        }
+                    }
+                ],
+                "line": 23
+            }
+        },
+        {
+            "op": "EVAL",
+            "dst": "$t17",
+            "raw_type": "Unknown",
+            "data": {
+                "mnemonic": "CMP",
+                "operands": [
+                    {
+                        "type": "var",
+                        "value": "%temp_1"
+                    },
+                    {
+                        "type": "imm",
+                        "value": "2"
+                    }
+                ],
+                "line": 23
+            }
+        },
+        {
+            "op": "EVAL",
+            "dst": "$t18",
+            "raw_type": "Unknown",
+            "data": {
+                "mnemonic": "JNE",
+                "operands": [
+                    {
+                        "type": "imm",
+                        "value": "IF_END_2"
+                    }
+                ],
+                "line": 23
+            }
+        },
+        {
+            "op": "EVAL",
+            "dst": "$t19",
+            "raw_type": "Unknown",
+            "data": {
+                "mnemonic": "LEA",
+                "operands": [
+                    {
+                        "type": "reg",
+                        "value": "rdi"
+                    },
+                    {
+                        "type": "mem",
+                        "value": {
+                            "symbolName": "msg1",
+                            "offset": 2,
+                            "bitWidth": 8
+                        }
+                    }
+                ],
+                "line": 24
+            }
+        },
+        {
+            "op": "EVAL",
+            "dst": "$t20",
+            "raw_type": "Unknown",
+            "data": {
+                "mnemonic": "CALL",
+                "operands": [
+                    {
+                        "type": "imm",
+                        "value": "print"
+                    }
+                ],
+                "line": 24
+            }
+        },
+        {
+            "op": "EVAL",
+            "dst": "$t21",
+            "raw_type": "Unknown",
+            "data": {
+                "mnemonic": "STORE_32",
+                "operands": [
+                    {
+                        "type": "reg",
+                        "value": "rax"
+                    },
+                    {
+                        "type": "mem",
+                        "value": {
+                            "symbolName": "tmp1",
+                            "offset": 0,
+                            "bitWidth": 32
+                        }
+                    }
+                ],
+                "line": 24
+            }
+        },
+        {
+            "op": "EVAL",
+            "dst": "$t22",
+            "raw_type": "Unknown",
+            "data": {
+                "mnemonic": "LABEL",
+                "operands": [
+                    {
+                        "type": "imm",
+                        "value": "IF_END_2"
+                    }
+                ],
+                "line": 23
+            }
+        },
+        {
+            "op": "EVAL",
+            "dst": "$t23",
+            "raw_type": "Unknown",
+            "data": {
+                "mnemonic": "MOVSXD",
+                "operands": [
+                    {
+                        "type": "var",
+                        "value": "%temp_2"
+                    },
+                    {
+                        "type": "mem",
+                        "value": {
+                            "symbolName": "tmp",
+                            "offset": 0,
+                            "bitWidth": 32
+                        }
+                    }
+                ],
+                "line": 26
+            }
+        },
+        {
+            "op": "EVAL",
+            "dst": "$t24",
+            "raw_type": "Unknown",
+            "data": {
+                "mnemonic": "ADD",
+                "operands": [
+                    {
+                        "type": "var",
+                        "value": "%temp_3"
+                    },
+                    {
+                        "type": "var",
+                        "value": "%temp_2"
+                    },
+                    {
+                        "type": "imm",
+                        "value": "1"
+                    }
+                ],
+                "line": 26
+            }
+        },
+        {
+            "op": "EVAL",
+            "dst": "$t25",
+            "raw_type": "Unknown",
+            "data": {
+                "mnemonic": "STORE_32",
+                "operands": [
+                    {
+                        "type": "var",
+                        "value": "%temp_3"
+                    },
+                    {
+                        "type": "mem",
+                        "value": {
+                            "symbolName": "tmp",
+                            "offset": 0,
+                            "bitWidth": 32
+                        }
+                    }
+                ],
+                "line": 26
+            }
+        },
+        {
+            "op": "EVAL",
+            "dst": "$t26",
+            "raw_type": "Unknown",
+            "data": {
+                "mnemonic": "JMP",
+                "operands": [
+                    {
+                        "type": "imm",
+                        "value": "WHILE_START_0"
+                    }
+                ],
+                "line": 21
+            }
+        },
+        {
+            "op": "EVAL",
+            "dst": "$t27",
+            "raw_type": "Unknown",
+            "data": {
+                "mnemonic": "LABEL",
+                "operands": [
+                    {
+                        "type": "imm",
+                        "value": "WHILE_END_1"
+                    }
+                ],
+                "line": 21
+            }
+        },
+        {
+            "op": "EVAL",
+            "dst": "$t28",
+            "raw_type": "Unknown",
+            "data": {
+                "mnemonic": "RET",
+                "operands": [],
+                "line": 20
+            }
+        }
+    ]
+}

@@ -4,9 +4,11 @@ default rel
 extern system.linux.output.print
 
 section .data
-    msg         dw 14 ; max length header
+    msg         dd 14 ; max length (capacity) header
+                dd 13 ; current length header
                 db `Hello World\r\n`, 0
-    msg1        dw 13 ; max length header
+    msg1        dd 13 ; max length (capacity) header
+                dd 12 ; current length header
                 db `from Roger\r\n`, 0
     tmp         dd 1
 
@@ -30,13 +32,17 @@ WHILE_START_0: ; line 17
     movsxd  r10, dword [rel tmp] ; line 17
     cmp     r10, 4 ; line 17
     jge     WHILE_END_1 ; line 17
-    lea     rdi, [rel msg + 2] ; line 18
+    lea     rdi, [rel msg + 8] ; line 18
+    movsxd  r10, dword [rel msg + 4] ; line 18
+    mov     rsi, r10 ; line 18
     call    system.linux.output.print ; line 18
     mov     dword [rel tmp1], eax ; line 18
     movsxd  r10, dword [rel tmp] ; line 19
     cmp     r10, 2 ; line 19
     jne     IF_END_2 ; line 19
-    lea     rdi, [rel msg1 + 2] ; line 20
+    lea     rdi, [rel msg1 + 8] ; line 20
+    movsxd  r10, dword [rel msg1 + 4] ; line 20
+    mov     rsi, r10 ; line 20
     call    system.linux.output.print ; line 20
     mov     dword [rel tmp1], eax ; line 20
 

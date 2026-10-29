@@ -10,7 +10,7 @@
         {
             "type": "metadata",
             "key": "stringbytes",
-            "value": "2",
+            "value": "4",
             "line": 3
         },
         {
@@ -108,6 +108,17 @@
                                                 "type": "variable_reference",
                                                 "name": "msg",
                                                 "line": 18
+                                            },
+                                            {
+                                                "type": "member_access",
+                                                "object": "msg",
+                                                "member": "size",
+                                                "path": [
+                                                    "msg",
+                                                    "size"
+                                                ],
+                                                "full": "msg.size",
+                                                "line": 18
                                             }
                                         ],
                                         "line": 18
@@ -142,6 +153,17 @@
                                                     {
                                                         "type": "variable_reference",
                                                         "name": "msg1",
+                                                        "line": 20
+                                                    },
+                                                    {
+                                                        "type": "member_access",
+                                                        "object": "msg1",
+                                                        "member": "size",
+                                                        "path": [
+                                                            "msg1",
+                                                            "size"
+                                                        ],
+                                                        "full": "msg1.size",
                                                         "line": 20
                                                     }
                                                 ],

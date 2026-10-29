@@ -75,6 +75,11 @@
             font-size: 11px;
             padding: 4px 8px;
         }
+        
+        optgroup {
+            background: #333;
+            color: #fff;
+        }
     </style>
 </head>
 <body>
@@ -107,41 +112,68 @@
                         <div class="form-group">
                             <label class="small text-muted font-weight-bold">SELECT ACTION</label>
                             <select id="action-select" class="form-control bg-dark text-light border-secondary" onchange="onActionChange()">
-                                <option value="list_projects">list_projects</option>
-                                <option value="create_project">create_project</option>
-                                <option value="list_files">list_files</option>
-                                <option value="create_file">create_file</option>
-                                <option value="load">load</option>
-                                <option value="save">save</option>
-                                <option value="compile_and_fetch">compile_and_fetch</option>
-                                <option value="custom">-- Custom Action --</option>
+                                <optgroup label="Authentication & Users">
+                                    <option value="session_status">session_status</option>
+                                    <option value="register">register</option>
+                                    <option value="login">login</option>
+                                    <option value="logout">logout</option>
+                                </optgroup>
+                                <optgroup label="Project Management">
+                                    <option value="list_projects">list_projects</option>
+                                    <option value="create_project">create_project</option>
+                                    <option value="rename_project">rename_project</option>
+                                    <option value="delete_project">delete_project</option>
+                                </optgroup>
+                                <optgroup label="File Management">
+                                    <option value="list_files">list_files</option>
+                                    <option value="create_file">create_file</option>
+                                    <option value="rename_file">rename_file</option>
+                                    <option value="delete_file">delete_file</option>
+                                    <option value="load">load (Read File)</option>
+                                    <option value="save">save (Write File)</option>
+                                </optgroup>
+                                <optgroup label="Compiler & Execution">
+                                    <option value="compile">compile</option>
+                                    <option value="compile_and_fetch">compile_and_fetch</option>
+                                    <option value="run">run</option>
+                                </optgroup>
+                                <optgroup label="Other">
+                                    <option value="custom">-- Custom Action --</option>
+                                </optgroup>
                             </select>
                         </div>
 
                         <!-- Target Action Input (For custom override) -->
                         <div class="form-group">
                             <label class="small text-muted font-weight-bold">ACTION PARAMETER (?action=)</label>
-                            <input type="text" id="action-input" class="form-control form-control-sm bg-dark text-light border-secondary" value="list_projects">
+                            <input type="text" id="action-input" class="form-control form-control-sm bg-dark text-light border-secondary" value="session_status">
                         </div>
 
                         <div class="form-row">
                             <!-- Project Parameter -->
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 <label class="small text-muted font-weight-bold">PROJECT (?project=)</label>
                                 <input type="text" id="project-input" class="form-control form-control-sm bg-dark text-light border-secondary" value="default">
                             </div>
 
                             <!-- File Parameter -->
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 <label class="small text-muted font-weight-bold">FILE (?file=)</label>
                                 <input type="text" id="file-input" class="form-control form-control-sm bg-dark text-light border-secondary" value="main.hac">
+                            </div>
+
+                            <!-- New Name Parameter (For Renames) -->
+                            <div class="form-group col-md-4">
+                                <label class="small text-muted font-weight-bold">NEW NAME (?new_name=)</label>
+                                <input type="text" id="new-name-input" class="form-control form-control-sm bg-dark text-light border-secondary" value="">
                             </div>
                         </div>
 
                         <!-- Stage Parameter -->
                         <div class="form-group">
-                            <label class="small text-muted font-weight-bold">STAGE (?stage=)</label>
+                            <label class="small text-muted font-weight-bold">COMPILER STAGE (?stage=)</label>
                             <select id="stage-input" class="form-control form-control-sm bg-dark text-light border-secondary">
+                                <option value="">-- None (Full Compile) --</option>
                                 <option value="lexer">lexer</option>
                                 <option value="parser">parser</option>
                                 <option value="mir">mir</option>
@@ -189,11 +221,11 @@
                     <div class="card-body py-2">
                         <div class="small mb-1">
                             <strong class="text-secondary">TARGET URL:</strong> 
-                            <span id="request-url-display" class="text-info font-weight-bold">api.php?action=list_projects</span>
+                            <span id="request-url-display" class="text-info font-weight-bold">api.php?action=session_status</span>
                         </div>
                         <div class="small mb-1">
                             <strong class="text-secondary">HEADERS:</strong> 
-                            <span id="request-headers-display" class="text-warning">Content-Type: application/json</span>
+                            <span id="request-headers-display" class="text-warning">None</span>
                         </div>
                         <div class="small">
                             <strong class="text-secondary">PAYLOAD SENT:</strong> 
@@ -205,11 +237,11 @@
                 <!-- JSON Dump Response Card -->
                 <div class="card card-dark shadow-sm">
                     <div class="card-header card-header-dark d-flex justify-content-between align-items-center">
-                        <span><i class="fas fa-code mr-2"></i>Raw JSON Response</span>
+                        <span><i class="fas fa-code mr-2"></i>Raw Response Dump</span>
                         <span id="response-status" class="badge badge-secondary">Awaiting Call</span>
                     </div>
                     <div class="card-body">
-                        <pre id="json-response-dump" class="code-dump">// Click "Send Request" to view raw JSON output from api.php...</pre>
+                        <pre id="json-response-dump" class="code-dump">// Click "Send Request" to view output from api.php...</pre>
                     </div>
                 </div>
 
@@ -220,27 +252,48 @@
 
     <!-- TEST HARNESS LOGIC -->
     <script>
-        // Preset action defaults for quick testing
         const actionDefaults = {
-            'list_projects': { method: 'GET', project: '', file: '', payload: '' },
-            'create_project': { method: 'GET', project: 'my_test_project', file: '', payload: '' },
-            'list_files': { method: 'GET', project: 'default', file: '', payload: '' },
-            'create_file': { method: 'POST', project: 'default', file: 'test_file.hac', payload: '' },
-            'load': { method: 'GET', project: 'default', file: 'main.hac', payload: '' },
+            'session_status': { method: 'GET', project: '', file: '', new_name: '', stage: '', payload: '' },
+            'register': { 
+                method: 'POST', project: '', file: '', new_name: '', stage: '', 
+                payload: JSON.stringify({ username: "testuser", email: "test@example.com", password: "password123" }, null, 2) 
+            },
+            'login': { 
+                method: 'POST', project: '', file: '', new_name: '', stage: '', 
+                payload: JSON.stringify({ username: "testuser", password: "password123" }, null, 2) 
+            },
+            'logout': { method: 'POST', project: '', file: '', new_name: '', stage: '', payload: '' },
+
+            'list_projects': { method: 'GET', project: '', file: '', new_name: '', stage: '', payload: '' },
+            'create_project': { method: 'POST', project: 'my_test_project', file: '', new_name: '', stage: '', payload: '' },
+            'rename_project': { method: 'POST', project: 'my_test_project', file: '', new_name: 'renamed_project', stage: '', payload: '' },
+            'delete_project': { method: 'POST', project: 'my_test_project', file: '', new_name: '', stage: '', payload: '' },
+            
+            'list_files': { method: 'GET', project: 'default', file: '', new_name: '', stage: '', payload: '' },
+            'create_file': { method: 'POST', project: 'default', file: 'test_file.hac', new_name: '', stage: '', payload: '' },
+            'rename_file': { method: 'POST', project: 'default', file: 'test_file.hac', new_name: 'renamed.hac', stage: '', payload: '' },
+            'delete_file': { method: 'POST', project: 'default', file: 'test_file.hac', new_name: '', stage: '', payload: '' },
+            'load': { method: 'GET', project: 'default', file: 'main.hac', new_name: '', stage: '', payload: '' },
             'save': { 
                 method: 'POST', 
                 project: 'default', 
                 file: 'main.hac', 
+                new_name: '',
+                stage: '',
                 payload: JSON.stringify({ content: "// Test save from test.html\n\nfunc main() {\n    return 42;\n}" }, null, 2) 
             },
+            
+            'compile': { method: 'POST', project: 'default', file: 'main.hac', new_name: '', stage: '', payload: '' },
             'compile_and_fetch': { 
                 method: 'POST', 
                 project: 'default', 
                 file: 'main.hac', 
+                new_name: '',
                 stage: 'lexer',
                 payload: JSON.stringify({ content: "// Code to compile\nnamespace default\\main {\n}" }, null, 2) 
             },
-            'custom': { method: 'GET', project: 'default', file: 'main.hac', payload: '' }
+            'run': { method: 'POST', project: 'default', file: 'main.hac', new_name: '', stage: '', payload: '' },
+            'custom': { method: 'GET', project: 'default', file: 'main.hac', new_name: '', stage: '', payload: '' }
         };
 
         function updateMethodBadge() {
@@ -257,12 +310,12 @@
 
             const config = actionDefaults[action] || actionDefaults['custom'];
 
-            // Update parameters
             document.getElementById('project-input').value = config.project;
             document.getElementById('file-input').value = config.file;
+            document.getElementById('new-name-input').value = config.new_name || '';
+            document.getElementById('stage-input').value = config.stage || '';
             document.getElementById('payload-input').value = config.payload || '';
 
-            // Update radio selection
             if (config.method === 'POST') {
                 document.getElementById('method-post').checked = true;
             } else {
@@ -276,6 +329,7 @@
             const action = document.getElementById('action-input').value.trim();
             const project = document.getElementById('project-input').value.trim();
             const file = document.getElementById('file-input').value.trim();
+            const newName = document.getElementById('new-name-input').value.trim();
             const stage = document.getElementById('stage-input').value;
             const method = document.querySelector('input[name="http-method"]:checked').value;
             const rawPayload = document.getElementById('payload-input').value;
@@ -283,16 +337,15 @@
             const statusBadge = document.getElementById('response-status');
             const dumpContainer = document.getElementById('json-response-dump');
 
-            // Build Query String URL
             let queryParams = [];
             if (action) queryParams.push(`action=${encodeURIComponent(action)}`);
             if (project) queryParams.push(`project=${encodeURIComponent(project)}`);
             if (file) queryParams.push(`file=${encodeURIComponent(file)}`);
-            if (action === 'compile_and_fetch' && stage) queryParams.push(`stage=${encodeURIComponent(stage)}`);
+            if (newName) queryParams.push(`new_name=${encodeURIComponent(newName)}`);
+            if (stage && (action === 'compile_and_fetch' || action === 'compile')) queryParams.push(`stage=${encodeURIComponent(stage)}`);
 
             const targetUrl = `api.php?${queryParams.join('&')}`;
 
-            // Update Request Inspector
             document.getElementById('request-url-display').textContent = targetUrl;
             document.getElementById('request-headers-display').textContent = method === 'POST' ? 'Content-Type: application/json' : 'None';
             document.getElementById('request-body-display').textContent = (method === 'POST' && rawPayload) ? rawPayload : 'None';
@@ -300,7 +353,6 @@
             statusBadge.textContent = "Executing...";
             statusBadge.className = "badge badge-warning";
 
-            // Prepare fetch options
             const fetchOptions = {
                 method: method,
                 headers: {}
@@ -313,18 +365,21 @@
 
             try {
                 const response = await fetch(targetUrl, fetchOptions);
-                const isJson = response.headers.get('content-type')?.includes('application/json');
-                
+                const rawText = await response.text();
+
                 statusBadge.textContent = `${response.status} ${response.statusText}`;
                 statusBadge.className = response.ok ? "badge badge-success" : "badge badge-danger";
 
-                if (isJson) {
-                    const data = await response.json();
+                if (!rawText.trim()) {
+                    dumpContainer.textContent = "// Warning: Server returned an empty response (0 bytes).\n// Ensure api.php handles action '" + action + "' and calls json_encode().";
+                    return;
+                }
+
+                try {
+                    const data = JSON.parse(rawText);
                     dumpContainer.textContent = JSON.stringify(data, null, 2);
-                } else {
-                    // Fallback if PHP returns raw HTML or plain text error
-                    const textData = await response.text();
-                    dumpContainer.textContent = textData || "// Empty response returned";
+                } catch (parseError) {
+                    dumpContainer.textContent = "// Server returned non-JSON response:\n\n" + rawText;
                 }
 
             } catch (err) {
@@ -333,12 +388,11 @@
                 dumpContainer.textContent = JSON.stringify({
                     status: "error",
                     message: err.message,
-                    hint: "Ensure api.php is accessible and web server is running."
+                    hint: "Could not reach api.php. Ensure your web server (e.g., Apache/Nginx/PHP) is running."
                 }, null, 2);
             }
         }
 
-        // Initialize state on load
         document.addEventListener('DOMContentLoaded', () => {
             onActionChange();
         });
